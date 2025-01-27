@@ -1,0 +1,69 @@
+/* FilterBox.module.css */
+
+.filterMenu {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Add margin bottom for space */
+    margin-top: 20px;
+    
+}
+
+.filterMenuItems {
+    display: flex;
+    align-items: center;
+    color: #000;
+    border: 0.6px solid rgba(213, 213, 213, 1);
+    border-radius: 10px;
+    width: 718px;
+    height: 70px;
+    
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.menuItem:not(:last-child) {
+    /* margin-right: 10px; Adjust the margin as needed */
+     padding-right: 10px; /*Add padding for spacing */
+    border-right: 1px solid rgba(213, 213, 213, 1); /* Add vertical line */
+}
+
+.filterBoxContainer {
+    position: relative;
+}
+
+.datePickerContainer {
+    position: absolute;
+    background-color: rgb(4, 4, 4);
+    border-radius: 20px;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+}
+
+.customDateColor {
+    color: greenyellow;
+}
+.outlinedButton {
+    display: flex;
+}
+.ContactType {
+    padding: '20px';
+    width: '650px',
+  }
+ .outlinedButton {
+    display: 'flex';
+    flex-wrap: 'wrap';
+    gap: '10px';
+  }
+
+.menuItem{
+    border: '1px solid #D3D3D3';
+    border-radius: '20px';
+    padding: '10px 20px',
+  }
+ 

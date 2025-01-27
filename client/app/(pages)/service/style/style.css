@@ -1,0 +1,42 @@
+.top_section { padding: 80px 167px; background: #141516; }
+.top_section_title { color: #f3f5f8; font-size: 36px; line-height: 44px; font-weight: 700; text-align: center; }
+.top_section_paragraph { color: #f3f5f8; font-size: 16px; line-height: 24px; font-weight: 400; text-align: center; margin: 24px auto; width: 36%; }
+.top_resturant_section { display: flex; gap: 32px; margin: 40px 0; align-items: center; justify-content: space-between; }
+.resturant_section { border: 1px solid #fff; padding: 127px 73px; color: #fff; font-size: 42px; line-height: 52px; font-weight: 700; text-align: center; }
+.bottom_title { background: #141516; color: #8b848487; font-size: 120px; line-height: 40px; padding: 87px 123px; font-weight: 800; text-align: center; }
+.emerging_container,.existing_container{background: #fff;padding: 20px 0 0;}
+/* existing_section */
+.list_container { padding: 0 167px; }
+.emerging_title { color: #141516; font-size: 42px; line-height: 51px; font-weight: 700; text-align: center; }
+.title { margin: 60px 0 0; color: #141516; font-size: 48px; line-height: 58px; font-weight: 700; text-align: center; }
+.paragraph { color: #141516; font-size: 16px; line-height: 24px; font-weight: 400; text-align: center; margin: 24px auto; width: 36%; }
+/* price_plan */
+.price_Choose_link:hover { background: #cbbc87; border-radius: 12px; color: #fff; }
+.price_Choose_link { padding: 12px 21px; font-size: 22px; line-height: 40px; font-weight: 600; width: 272px; color: #141516; border: 1px solid #cbbc87; height: auto; border-radius: 12px; text-align: center; }
+.price { margin: 24px 0; color: #a9a9aa; font-size: 24px; line-height: 30px; font-weight: 700; }
+.price_box { padding: 36px; background: #fff; width: 26%; border-radius: 20px; height: 100%; }
+.price_plan { padding: 80px 167px; background: linear-gradient(to top,#fff, #f3f5f8); display: flex; justify-content: space-between; align-items: center; gap: 32px; }
+.final_price_list { font-size: 18px; line-height: 40px; font-weight: 400; color: #0b0914; }
+.price_seat { margin: 40px 0; color: #35353f; font-size: 18px; line-height: 22px; font-weight: 400; }
+.icons { margin: -5px 4px -5px 0; }
+.price_data { display: flex; gap: 15px; align-items: center; }
+.final_price { font-size: 32px; line-height: 40px; font-weight: 700; color: #0b0914; margin: 28px 0; }
+.price_title { font-size: 32px; line-height: 40px; font-weight: 700; color: #0b0914; }
+.Choose_link { display: flex; justify-content: center; align-items: center; }
+.price_dot_line { border: 1px solid #a9a9aa; border-style: dashed; }
+/* all_in */
+.all_in_bottom_line { position: relative; margin: 0 15%; border: 1px solid #a3a3a3; }
+.all_in_card { width: 322px; height: 202px;transition: transform 0.8s; }
+.all_in_container { display: grid; grid-template-columns: auto auto auto; gap: 36px; margin: 40px 0; }
+.all_in_box { margin: 20px 44px; }
+.all_in_view_more { margin: 54px 0; display: flex; justify-content: center; align-items: center; }
+.all_in_view_more_link { font-size: 16px; line-height: 24px; font-weight: 400; color: #cbbc87; border-radius: 37px; border: 1px solid; padding: 11px 17px; width: 165px; height: auto; text-align: center; }
+.all_in_product { display: flex; align-items: center; gap: 20px; }
+.all_in_product_name { font-size: 18px; line-height: 22px; font-weight: 700; color: #141516; }
+.all_in_product_paragraph { margin: 16px 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #141516; }
+.all_in_show_more { margin: 16px 0; font-size: 15px; line-height: 18px; font-weight: 700; color: #858585; text-align: center; }
+.all_in_show { display: flex; justify-content: center; align-items: center; }
+.all_in_card:hover { box-shadow: 4px 4px 9px 4px #7a7a7b; border: 1px solid #141516; border-radius: 20px; -ms-transform: scale(1.06); -webkit-transform: scale(1.06); transform: scale(1.06); }
+.all_in_show_more:hover { color: #cbbc87; }
+
+

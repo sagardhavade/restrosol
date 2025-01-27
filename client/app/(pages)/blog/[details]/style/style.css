@@ -1,0 +1,41 @@
+.blogs_redirection { background: #141516; padding: 40px 0; }
+.blogs_previous { font-size: 15px; line-height: 18px; font-weight: 700; display: flex; color: #a3a3a3; align-items: center; margin: 10px 0; }
+.blogs_banner { width: auto; position: relative; }
+.blogs_top_title { font-size: 30px; line-height: 36px; font-weight: 700; color: #fff; }
+.share { padding: 0 167px; position: absolute; bottom: 55px; display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; }
+.updated_date { font-size: 15px; line-height: 18px; font-weight: 700; display: flex; color: #fff; align-items: center; margin: 10px 0; }
+.comments { font-size: 15px; line-height: 18px; font-weight: 700; display: flex; color: #fff; align-items: center; margin: 10px 0; }
+.view { font-size: 15px; line-height: 18px; font-weight: 700; display: flex; color: #fff; align-items: center; margin: 10px 0; }
+.share-button { background: #cbbc87; padding: 10px 30px 10px 20px; border-left: 4px solid #141516; }
+.share_box { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.share_icon { font-size: 15px; line-height: 18px; font-weight: 700; display: flex; color: #333; align-items: center; }
+.details_section { padding: 80px 150px; background: #fff; }
+.comment_share { display: flex; justify-content: center; align-items: center; gap: 30px; margin: 40px 0; }
+.details_card { padding: 40px 0; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.details_title_card { font-size: 20px; line-height: 24px; font-weight: 700; color: #333; margin: 20px 0; }
+.details_title { font-size: 30px; line-height: 36px; font-weight: 700; color: #333; margin: 20px 0; }
+.details_paragraph_card { font-size: 16px; line-height: 24px; font-weight: 400; color: #333; margin: 0 0 20px; }
+.about_section_card2 { padding: 40px 0; display: flex; align-items: center; justify-content: space-between; gap: 42px; flex-direction: row-reverse; }
+.record_clients_image { background: #f1f3f7; border-radius: 8px; width: 77%; }
+.blogs_latest_article { font-size: 36px; font-weight: 800; line-height: 40px; color: #6d758f; }
+.blogs_underline { border: 1px solid #e1e4ed; }
+.blogs_latest_section { padding: 40px 0; }
+.image_category_card { width: 353px; height: 421px; display: flex; border-radius: 8px; flex-direction: column; border: 1px solid #e1e4ed; }
+.image_category_img { background: #f1f3f7; width: 353px; height: 239px; display: flex; align-items: center; justify-content: center; }
+.image_category_text { margin: 32px; }
+.blogs_card_container { display: grid; grid-template-columns: auto auto auto; gap: 24px; padding: 80px 17px; }
+.bottom_line { border: 1px solid #e1e4ed; margin: 15px 0; }
+.category_bottom { display: flex; align-items: center; justify-content: space-between; }
+.image_category_card:hover { box-shadow: 1px 2px 4px 2px #6d758f; }
+.image_title { font-size: 18px; line-height: 22px; font-weight: 600; color: #6d758f; }
+.image_paragraph { font-size: 16px; line-height: 24px; font-weight: 400; margin: 14px 0; color: #6d758f; }
+.category_blog { font-size: 14px; line-height: 20px; font-weight: 600; color: #6d758f; }
+.quiry { background: #f3f5f8; font-size: 30px; line-height: 36px; font-weight: 600; text-align: center; color: #141516; padding: 60px 101px; }
+/* comments */
+.comments_box{margin: 40px 0;}
+.comments_updated { display: flex; align-items: center; gap: 30px;margin: 20px 0 0; }
+.comments_name { font-size: 12px; line-height: 18px; font-weight: 400; display: flex; color: #333333; align-items: center;  }
+.comments_paragraph { font-size: 16px; line-height: 24px; font-weight: 400; display: flex; color: #333333; align-items: center; margin: 20px 0; }
+.comments_date { font-size: 12px; line-height: 18px; font-weight: 400; display: flex; color: #333333; align-items: center; }
+.comments_underline{ border: 1px solid #e1e4ed;margin: 40px 0 ; }
+.load_more{font-size: 16px; line-height: 19px; font-weight: 400; display: flex; color: #333333; align-items: center; margin: 20px 0;cursor: pointer; }

@@ -1,0 +1,24 @@
+.top_details_card { padding: 80px 167px; background: #fff; }
+.banner>img{transition: transform 0.8s; }
+.banner>img:hover{-ms-transform: scale(1.06); -webkit-transform: scale(1.06); transform: scale(1.06); }
+.bottom_title { background: #141516; color: #8b848487; font-size: 120px; line-height: 40px; padding: 87px 123px; font-weight: 800; text-align: center; }
+.underline { border: 1px solid #141516; }
+.top_card_title { color: #141516; font-size: 200px; line-height: 40px; font-weight: 800; text-align: center; opacity: 20%; padding: 80px 0 160px; }
+.nav_bar { display: flex; align-items: center; justify-content: center; padding: 20px 0; font-size: 18px; line-height: 21px; font-weight: 700; }
+.nav_bar>a { color: #a3a3a3; cursor: pointer; }
+.details_paragraph { color: #141516; font-size: 16px; line-height: 24px; font-weight: 400; text-align: center; margin: 40px 0; }
+.navigation { display: flex; align-items: center; gap: 20px; margin: 40px 0; }
+.record_details_card_box { display: flex; align-items: center;  gap: 36px;justify-content: space-between; }
+.record_details_image { margin: 0 60px; }
+.record_details_image>img:hover,.record_details_image>img:focus{  filter: invert(35%) sepia(90%);}
+.record_title { color: #cbbc87; font-size: 15px; line-height: 18px; font-weight: 700; margin: 10px 0; }
+.record_headline { color: #141516; font-size: 36px; line-height: 44px; font-weight: 700; }
+.record_clients_paragraph { font-size: 16px; line-height: 24px; color: #6d758f; font-weight: 400; margin: 24px 0; }
+.record_description { font-size: 16px; line-height: 22px; font-weight: 600; color: #6d758f; }
+.icon { margin: -2px 0; }
+.record_details_card { width: 50%; }
+.dash_line1 { margin: -59px 28%; }
+.dash_line2 { margin: -60px 17%; }
+.dash_line3 { margin: -61px 41%; }
+.dash_line4 { margin: -51px 14%; }
+.dash_line5 { margin: -45px 35%; }

@@ -1,0 +1,26 @@
+.top_card_title { color: #fff; font-size: 200px; line-height: 40px; font-weight: 800; text-align: center; opacity: 20%; padding: 80px 0 167px; }
+.top_card_section { padding: 80px 167px; background: #141516; }
+.category_details_name { font-size: 48px; line-height: 58px; font-weight: 700; color: #fff; text-align: center; }
+.category_headline { font-size: 16px; line-height: 24px; font-weight: 400; color: #fff; text-align: center; margin: 24px 30%; }
+.top_title_bottom_line { border: 1px solid #8d8d8d; margin: 20px 38%; }
+/* contact_page */
+.contact-us_card { padding: 80px 167px; background: #f3f5f8; }
+.contact-us_section { display: flex; justify-content: space-between; }
+.contact-us { background: #141516; color: #fff; width: 42%; }
+.contact-us_title { font-size: 28px; line-height: 42px; font-weight: 600; color: #fff; padding: 40px 30px 10px; }
+.contact-us_headline { font-size: 18px; line-height: 27px; font-weight: 400; color: #c9c9c9; margin: 0 0 80px; padding: 0 30px 10px; }
+.contact-us_details { width: 75%; display: flex; gap: 12px; margin: 30px 0; color: #fff; padding: 6px 30px; }
+.contact-us_details_text { font-size: 16px; line-height: 24px; font-weight: 400; color: #fff; }
+.contact-us_sharing { padding: 0 0 0 30px; display: flex; align-items: center; justify-content: flex-start; margin: 80px 0 30px; gap: 20px; }
+.ellipse_logo { position: relative; top: 20px; left: 190px; }
+.ellipse_logo2 { position: absolute; top: -4px; left: 6px; opacity: 50%; }
+.contact_login_form { background: #fff; padding: 40px; width: 58%; height: 716px; }
+.login_form>input { margin: 10px 0; cursor: pointer; border: none; border-bottom: 1px solid #8d8d8d; color: #8d8d8d; font-size: 14px; line-height: 20px; font-weight: 500; }
+.write_message { padding: 24px 45px; }
+.radio_button { font-size: 12px; font-weight: 400; line-height: 20px; color: #000; margin: 24px 0 0; display: flex; align-items: center; justify-content: space-between; }
+.select_subject { font-size: 14px; font-weight: 600; line-height: 20px; color: #000; padding: 30px 45px; }
+.write_message>input { margin: 10px 0; width: 100%; cursor: pointer; border: none; border-bottom: 1px solid #8d8d8d; color: #8d8d8d; font-size: 14px; line-height: 20px; font-weight: 500; }
+.send_message { cursor: pointer; float: right; font-size: 16px; line-height: 24px; font-weight: 500; text-align: center; background: #141516; color: #fff; padding: 15px 48px; width: 38%; margin: 24px 45px; }
+.login_card { display: flex; align-items: center; justify-content: space-around; margin: 24px 0; }
+.login_form { display: grid; }
+label { font-size: 12px; line-height: 20px; font-weight: 500; color: #8d8d8d; }

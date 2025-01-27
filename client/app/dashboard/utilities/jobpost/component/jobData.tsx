@@ -1,0 +1,80 @@
+// components/jobData.ts
+
+export const jobData = [
+  {
+    postedOn: '10 May, 2024',
+    title: 'Relationship Manager',
+    location: 'India',
+    department: 'Retail Banking',
+    description: 'As a Relationship Manager at Retailrural, you will be responsible for developing and maintaining relationships with our valued customers. You will proactively identify their financial needs and offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent communication skills, a strong sales acumen, and a passion for delivering exceptional customer service.',
+    requirements: [
+      'Bachelor\'s degree in Business, Finance, or a related field',
+      'Minimum of 3 years of experience in sales or relationship management in the banking industry',
+      'Proven track record of meeting and exceeding sales targets',
+      'Excellent interpersonal and negotiation skills',
+      'Strong knowledge of banking products and services',
+    ],
+    closingDate: '2024-12-30',
+  },
+  {
+    postedOn: '10 May, 2024',
+    title: 'Relationship Manager',
+    location: 'India',
+    department: 'Retail Banking',
+    description: 'As a Relationship Manager at Retailrural, you will be responsible for developing and maintaining relationships with our valued customers. You will proactively identify their financial needs and offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent communication skills, a strong sales acumen, and a passion for delivering exceptional customer service.',
+    requirements: [
+      'Bachelor\'s degree in Business, Finance, or a related field',
+      'Minimum of 3 years of experience in sales or relationship management in the banking industry',
+      'Proven track record of meeting and exceeding sales targets',
+      'Excellent interpersonal and negotiation skills',
+      'Strong knowledge of banking products and services',
+    ],
+    closingDate: '2024-12-30',
+  },
+  {
+    postedOn: '10 May, 2024',
+    title: 'Relationship Manager',
+    location: 'India',
+    department: 'Retail Banking',
+    description: 'As a Relationship Manager at Retailrural, you will be responsible for developing and maintaining relationships with our valued customers. You will proactively identify their financial needs and offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent communication skills, a strong sales acumen, and a passion for delivering exceptional customer service.',
+    requirements: [
+      'Bachelor\'s degree in Business, Finance, or a related field',
+      'Minimum of 3 years of experience in sales or relationship management in the banking industry',
+      'Proven track record of meeting and exceeding sales targets',
+      'Excellent interpersonal and negotiation skills',
+      'Strong knowledge of banking products and services',
+    ],
+    closingDate: '2024-05-30',
+  },
+  {
+    postedOn: '12 May, 2024',
+    title: 'Sales Executive',
+    location: 'India',
+    department: 'Sales',
+    description: 'As a Sales Executive at Retailrural, you will drive our sales strategies and help our customers find the best solutions for their needs. We are seeking dynamic individuals with strong communication skills, a passion for sales, and a track record of achieving targets.',
+    requirements: [
+      'Bachelor\'s degree in Marketing, Business, or a related field',
+      'Minimum of 2 years of experience in sales',
+      'Proven ability to meet and exceed sales quotas',
+      'Excellent communication and negotiation skills',
+      'Knowledge of sales techniques and CRM software',
+    ],
+    closingDate: '2024-04-20',
+  },
+  {
+    postedOn: '12 May, 2024',
+    title: 'Sales Executive',
+    location: 'India',
+    department: 'Sales',
+    description: 'As a Sales Executive at Retailrural, you will drive our sales strategies and help our customers find the best solutions for their needs. We are seeking dynamic individuals with strong communication skills, a passion for sales, and a track record of achieving targets.',
+    requirements: [
+      'Bachelor\'s degree in Marketing, Business, or a related field',
+      'Minimum of 2 years of experience in sales',
+      'Proven ability to meet and exceed sales quotas',
+      'Excellent communication and negotiation skills',
+      'Knowledge of sales techniques and CRM software',
+    ],
+    closingDate: '2024-04-20',
+  },
+  // Add more job objects with different closingDates as needed
+];

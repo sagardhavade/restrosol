@@ -1,0 +1,46 @@
+.about_section { background: #141516; }
+.top_card { display: flex; align-items: center; justify-content: space-between; padding: 120px 0 0; gap: 40px; }
+.about { font-size: 15px; line-height: 18px; font-weight: 700; color: #cbbc87; }
+.about_left_card { width: 27%; height: 100%; margin: 0 150px; }
+.about_right_image_card { background: #fff; width: 709px; height: 535px; border-top-left-radius: 8px; display: flex; position: relative; align-items: center; justify-content: center; }
+.about_paragraph { font-size: 16px; line-height: 24px; font-weight: 400; color: #fff; }
+.about_title { font-size: 49px; line-height: 60px; font-weight: 700; color: #fff; margin: 8px 0; }
+.about_section_card_1 { padding: 80px 167px; display: flex; align-items: center; justify-content: space-between; gap: 42px; background: #fff; }
+.about_section_card_2 { padding: 80px 167px; display: flex; align-items: center; justify-content: space-between; gap: 42px; flex-direction: row-reverse; background: #fff; }
+.record_clients_image { border-radius: 8px; width: 77%; }
+/* value_section */
+.values_section { padding: 80px 167px; background: #f3f5f8; }
+.values_title { font-size: 36px; line-height: 43px; font-weight: 700; color: #141516; margin: 12px 0; }
+.values_paragraph { font-size: 16px; line-height: 24px; font-weight: 400; color: #6d758f; }
+.values_top_card { text-align: center; width: 42%; margin: 0 29%; }
+.values_bottom_card { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin: 22px 0; }
+.values_card { padding: 40px 24px;transition: transform 0.8s; }
+.values_number { font-size: 48px; line-height: 48px; font-weight: 600; color: #b4b9c9; }
+.values_card_title { font-size: 20px; line-height: 24px; font-weight: 700; color: #141516; margin: 10px 0; }
+.values_card:hover { border: 1px solid #141516; border-radius: 8px; padding: 40px 24px; box-shadow: 1px 2px 9px 5px #7a7a7b;-ms-transform: scale(1.06); -webkit-transform: scale(1.06); transform: scale(1.06); }
+/* mission_vision */
+.top_mission_card { padding: 60px 150px; }
+.top-mission_section { margin: 20px 15%; }
+.mission-prefix { font-size: 15px; line-height: 18px; font-weight: 700; color: #cbbc87; text-align: center; }
+.mission-title { margin: 16px 0; font-size: 42px; line-height: 51px; font-weight: 700; color: #fff; text-align: center; }
+.mission_headline { font-size: 16px; line-height: 24px; font-weight: 400; color: #b3b3b3; text-align: center; }
+.mission_vision_card { margin: 30px 0; }
+.mission_section { display: flex; align-items: center; }
+.mission_card_1 { border-left: 1px solid #cbbc87; padding: 0 40px; }
+.mission_card_2 { border-right: 1px solid #cbbc87; padding: 0 40px; }
+.mission_title { font-size: 38px; line-height: 43px; font-weight: 700; color: #fff; }
+.mission_paragraph { margin: 10px 0; font-size: 16px; line-height: 24px; font-weight: 400; color: #b3b3b3; }
+.mission_image_card { background: linear-gradient( #1c1c1c,#1c1c1c); border-radius: 50px 50px 20px 20px; }
+.mission_image { border-radius: 50px 50px 20px 20px; padding: 60px 60px 0 60px;}
+.mission_image>img { border-radius: 50px 50px 0 0; transition: transform 0.8s; }
+.mission_image>img:hover { -ms-transform: scale(1.06); -webkit-transform: scale(1.06); transform: scale(1.06); }
+/* award */
+.top_award_section{padding: 60px 80px;}
+.award_section { display: grid; grid-template-columns: auto auto; gap: 24px;margin: 40px 0 0; }
+.award_box { padding: 20px 24px 0; }
+.award_title { font-size: 20px; line-height: 30px; color: #fff; font-weight: 400; }
+.award_card { padding: 24px; border-radius: 40px 40px 16px 16px; border: 1px solid #1c1c1c;    background: #262626; }
+.award_image>img { border-radius: 30px 30px 12px 12px;transition: transform 0.8s; }
+.award_image>img:hover { -ms-transform: scale(1.06); -webkit-transform: scale(1.06); transform: scale(1.06); }
+.award_headline { margin: 0 25%; font-size: 16px; line-height: 24px; font-weight: 400; color: #b3b3b3; text-align: center; }
+.award_updated {margin: 10px 20px; display: flex; align-items: center; gap: 40px; }
