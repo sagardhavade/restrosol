@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import RootLayout from '@/app/dashboard/page';
 import { Box, Button, Grid, TextField, Typography, MenuItem, Select, Divider, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -8,20 +8,238 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import { addGallary } from '@/app/api/gallary/page';
 
 interface Client {
   name: string;
   image: string;
 }
+interface client {
+  clientName: string[];
+  // clientImage: string;
+  // clientImage: string[] | null; // Allow clientImage to be null
+  clientDescription: string;
+}
+interface brandSection {
+  category: string;
+  brandName: string;
+  brandDescription: string;
+
+}
+interface section {
+  description: string;
+  points: string[];
+}
+// interface ClientSection {
+//   clientImages: string[];
+// }
 
 const AddBrand: React.FC = () => {
+  const [sectionData, setSectionData] = useState<section | null>(null); // Can be null or a single object
+  const [brandSectionData, setBrandSectionData] = useState<brandSection | null>(null); // Can be null or a single object
+  const [clientSectionData, setClientSectionData] = useState<client | null>(null);
+
   const [gallery, setGallery] = useState<string>('');
   const [points, setPoints] = useState<string[]>(['']);
   const [clients, setClients] = useState<Client[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [brandName, setBrandName] = useState('');
+  const [brandDescription, setBrandDescription] = useState('');
+  const [description, setDescription] = useState('');
+
+  const [clientName, setClientName] = useState<string[]>(['']);
+  const [clientDescription, setClientDescription] = useState('');
+  // const [clientImages, setClientImages] = useState<string[]>(['']); // Initial empty string for client images (URL or placeholder)
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]); // State to store file names
+  // Handle image upload
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const file = e.target.files?.[0]; // Get the first file selected
+  //   if (file) {
+  //     const newClientImages = [...clientImages]; // Copy the clientImages array
+  //     newClientImages[index] = URL.createObjectURL(file); // Set the new image for the specific client
+  //     setClientImages(newClientImages); // Update the state with the new image
+  //   }
+  // };
+
+  // Load Section Data from LocalStorage on Page Load
+  useEffect(() => {
+    const savedSection = localStorage.getItem("sectionData");
+    const brandSection = localStorage.getItem("brandSectionData")
+    const clientSectionData = localStorage.getItem("clientSectionData");
+    console.log(brandSection);
+    if (savedSection) {
+      setSectionData(JSON.parse(savedSection)); // Now sectionData is an object, not an array
+    }
+    if (brandSection) {
+      setBrandSectionData(JSON.parse(brandSection));
+      // if (brandSectionData?.brandName) {
+      //   setBrandName(brandSectionData.brandName);
+      // }
+      console.log("brandsectionData", brandSectionData);
+    }
+    if (clientSectionData) {
+      setClientSectionData(JSON.parse(clientSectionData));
+      console.log("clientSectionData", clientSectionData);
+    }
+  }, []);
+  useEffect(() => {
+    if (brandSectionData?.brandDescription) {
+      setBrandDescription(brandSectionData.brandDescription)
+    }
+    if (brandSectionData?.brandName) {
+      setBrandName(brandSectionData.brandName);
+    }
+    if (brandSectionData?.category) {
+      setGallery(brandSectionData.category)
+    }
+
+  }, [brandSectionData]);
+  useEffect(() => {
+    if (sectionData?.description) {
+      setDescription(sectionData.description)
+    }
+    if (sectionData?.points) {
+      setPoints(sectionData.points);
+    }
+
+
+  }, [sectionData]);
+  useEffect(() => {
+    if (clientSectionData?.clientDescription) {
+      setClientDescription(clientSectionData.clientDescription)
+    }
+    if (clientSectionData?.clientName) {
+      setClientName(clientSectionData.clientName);
+    }
+    if (clientSectionData?.clientDescription) {
+      setClientDescription(clientSectionData.clientDescription);
+    }
+    // if (clientSectionData?.clientImage) {
+    //   setClientImages(clientSectionData.clientImage);
+    // }
+  }, [clientSectionData]);
+
+  // Save Section to LocalStorage
+  const handleSaveSection = () => {
+
+    const section: section = {
+
+      description,
+      points,
+
+    };
+    // Ensure prevState is always an array
+    setSectionData(section);
+
+    localStorage.setItem("sectionData", JSON.stringify(section));
+    alert("Section data saved temporarily!");
+  };
+  const handleBrandSaveSection = () => {
+    const category = gallery;
+    const section: brandSection = {
+      category,
+      brandName,
+      brandDescription
+    };
+    // Ensure prevState is always an array
+    setBrandSectionData(section);
+
+    localStorage.setItem("brandSectionData", JSON.stringify(section));
+    alert("Brand Section data saved!");
+  };
+
+  const handleClientSaveSection = () => {
+    const clientSection: client = {
+      clientName,
+      clientDescription,
+      // clientImage: clientImages, // Store the image URL or null
+    };
+
+    setClientSectionData(clientSection);
+    localStorage.setItem("clientSectionData", JSON.stringify(clientSection));
+    alert("Client Section Data Saved !");
+  }
+  const handleAddGallary = async () => {
+    // Retrieve stored data from localStorage
+    const sectionData = localStorage.getItem("sectionData");
+    const brandSectionData = localStorage.getItem("brandSectionData");
+    const clientSectionData = localStorage.getItem("clientSectionData");
+
+    // Parse JSON data
+    const section = sectionData ? JSON.parse(sectionData) : null;
+    const brandSection = brandSectionData ? JSON.parse(brandSectionData) : null;
+    const clientSection = clientSectionData ? JSON.parse(clientSectionData) : null;
+
+    // Combine all data into one object
+    const combinedData = {
+      ...section,
+      ...brandSection,
+      ...clientSection,
+    };
+
+    const formData = new FormData();
+    console.log(combinedData);
+    // Append form data (combinedData) as a string
+    // formData.append("data", JSON.stringify(combinedData));
+    formData.append("category", brandSection.category);
+    formData.append("brandName", brandSection.brandName);
+    formData.append("brandDescription", brandSection.brandDescription);
+    formData.append("description", section.description);
+    formData.append("points", section.points);
+    formData.append("clientName", clientSection.clientName);
+    formData.append("clientDescription", clientSection.clientDescription);
+
+
+    // Append files to form data
+    if (selectedFiles.length > 0) {
+      selectedFiles.forEach(file => {
+        formData.append("images", file); // Append each image/video to "images" field
+      });
+    } else {
+      // If no images, you can choose to append null or empty array
+      formData.append("images", JSON.stringify([])); // Append an empty array if no images
+    }
+
+    // Log FormData contents for debugging
+    formData.forEach((value, key) => {
+      console.log(key + ": " + value); // Log all FormData entries for debugging
+    });
+    // Handle client images (multiple)
+    // if (clientSection?.clientImage && clientSection.clientImage.length > 0) {
+    //   clientSection.clientImage.forEach((clientImage: string) => {
+    //     formData.append("clientImage", clientImage); // Append each client image
+    //   });
+    // }
+    // else {
+    //   formData.append("clientImage", ""); // If no client images, append an empty string
+    // }
+
+    // Log the FormData contents
+    formData.forEach((value, key) => {
+      console.log(key + ": " + value); // This logs all the FormData entries
+    });
+    try {
+      // Call the API with the formData
+      const result = await addGallary(formData);
+      alert('Gallery uploaded successfully!');
+
+      // Optionally clear selected files or localStorage here
+      setSelectedFiles([]);  // Clear selected files
+      localStorage.removeItem("sectionData");
+      localStorage.removeItem("brandSectionData");
+      localStorage.removeItem("clientSectionData");
+    } catch (error) {
+      console.error("Error uploading gallery:", error);
+      alert("Failed to upload gallery.");
+    }
+  };
+
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setGallery(event.target.value as string);
+
   };
 
   const handlePointChange = (index: number, value: string) => {
@@ -29,6 +247,7 @@ const AddBrand: React.FC = () => {
     newPoints[index] = value;
     setPoints(newPoints);
   };
+
 
   const addPoint = () => {
     setPoints([...points, '']);
@@ -38,7 +257,30 @@ const AddBrand: React.FC = () => {
     const newPoints = points.filter((_, i) => i !== index);
     setPoints(newPoints);
   };
+  // const handleClientChange = (index: number, value: string) => {
+  //   const newClient = [...clientName];
+  //   newClient[index] = value;
+  //   setclientName(newClient);
+  // };
 
+  const handleClientChange = (index: number, value: string) => {
+    const newClientNames = [...clientName];
+    newClientNames[index] = value;
+    setClientName(newClientNames);
+  };
+  const addClients = () => {
+    setClientName([...clientName, '']); // Add an empty client name
+    // setClientImages([...clientImages, '/placeholder.png']); // Add a placeholder image
+  };
+
+  // Add client button handler
+  // const addClients = () => {
+  //   if (clientName.length < 2) {
+  //     setclientName([...clientName, '']); // Add an empty client name for the next input
+  //   } else {
+  //     alert('Maximum 2 clients allowed!');
+  //   }
+  // };
   const addClient = () => {
     setClients([...clients, { name: '', image: Replace.src }]);
   };
@@ -49,18 +291,42 @@ const AddBrand: React.FC = () => {
     setClients(newClients);
   };
 
+  // const handleImageUpload = () => {
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.click();
+  //   }
+  // };
+
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (files && files.length > 0) {
+  //     // Handle the uploaded files
+  //     console.log(files);
+  //   }
+  // };
+
   const handleImageUpload = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-      // Handle the uploaded files
-      console.log(files);
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+
+    // Limit file selection to a max of 10
+    if (selectedFiles.length + fileArray.length > 10) {
+      alert("You can only upload a maximum of 10 images/videos.");
+      return;
     }
+
+    setSelectedFiles((prevFiles) => [...prevFiles, ...fileArray]);
+    setFileNames((prevNames) => [
+      ...prevNames,
+      ...fileArray.map((file) => file.name),
+    ]);
+
   };
 
   return (
@@ -68,8 +334,9 @@ const AddBrand: React.FC = () => {
       <RootLayout>
         <Grid container justifyContent="center">
           <Box>
-            <Button
+            {/* <Button
               variant="contained"
+              onClick={handleAddBrand}
               style={{
                 width: '165px',
                 height: '46px',
@@ -80,7 +347,7 @@ const AddBrand: React.FC = () => {
               }}
             >
               Save Gallery
-            </Button>
+            </Button> */}
             <Box
               mt={5}
               p={3}
@@ -144,6 +411,9 @@ const AddBrand: React.FC = () => {
 
               <TextField
                 placeholder="Brand Name..."
+                value={brandName}  // Directly access brandName from the object
+                onChange={(e) => setBrandName(e.target.value)}
+
                 sx={{
                   mt: 2,
                   border: 'none',
@@ -165,6 +435,8 @@ const AddBrand: React.FC = () => {
               />
               <TextField
                 placeholder="Brand Description"
+                value={brandDescription}
+                onChange={(e) => setBrandDescription(e.target.value)}
                 sx={{
                   mt: 2,
                   border: 'none',
@@ -187,6 +459,7 @@ const AddBrand: React.FC = () => {
               <Divider sx={{ border: '.5px solid #ccc ', m: 2 }} />
               <Button
                 variant="outlined"
+                onClick={handleBrandSaveSection}
                 style={{
                   height: '46px',
                   marginTop: '24px',
@@ -219,6 +492,8 @@ const AddBrand: React.FC = () => {
                     placeholder={`Add Brand Description and key values we solved`}
                     multiline
                     rows={2}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     sx={{
                       mt: 2,
                       border: 'none',
@@ -294,6 +569,7 @@ const AddBrand: React.FC = () => {
               <Divider sx={{ border: '.5px solid #ccc ', m: 2 }} />
               <Button
                 variant="outlined"
+                onClick={handleSaveSection}
                 style={{
                   width: '202px',
                   height: '46px',
@@ -333,12 +609,32 @@ const AddBrand: React.FC = () => {
                 onClick={handleImageUpload}
               >
                 Upload Images
-                <input type="file" hidden ref={fileInputRef} onChange={handleFileChange} />
+                {/* <input type="file" hidden ref={fileInputRef} onChange={handleFileChange} /> */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  hidden
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={handleFileChange}
+                />
+
               </Button>
               <Divider sx={{ border: '.5px solid #ccc ', m: 2 }} />
               <Typography variant="caption" display="block" sx={{ mt: 1 }}>
                 *Add Maximum 10 Images/Videos*
               </Typography>
+              {/* Display file names */}
+              {fileNames.length > 0 && (
+                <div style={{ marginTop: '10px' }}>
+                  <Typography variant="body2">Selected Files:</Typography>
+                  <ul>
+                    {fileNames.map((fileName, index) => (
+                      <li key={index}>{fileName}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </Box>
             <Box
               mt={5}
@@ -373,6 +669,8 @@ const AddBrand: React.FC = () => {
                   </Typography>
                   <TextField
                     placeholder="Brand Description"
+                    value={clientDescription}
+                    onChange={(e) => setClientDescription(e.target.value)}
                     sx={{
                       mt: 2,
                       border: 'none',
@@ -392,20 +690,42 @@ const AddBrand: React.FC = () => {
                       style: { height: '44px', fontSize: '42px' },
                     }}
                   />
-                  {clients.map((client, index) => (
+                  {clientName.map((client, index) => (
                     <Box key={index} sx={{ display: 'flex', gap: '50px', mt: 5 }}>
-                      <Image
-                        src={client.image}
+                      {/* <Image
+                        src={clientImage}
                         alt="Client Image"
                         width={76}
                         height={76}
                         objectFit="cover"
                         style={{ borderRadius: '50px' }}
+                      /> */}
+
+                      {/* Image upload input */}
+                      {/* <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(e, index)} // Call image handler
+                        style={{ display: 'none' }}
+                        id={`upload-image-${index}`} // Unique ID for each client
                       />
+                      <label htmlFor={`upload-image-${index}`} style={{ cursor: 'pointer' }}>
+                        
+                        <Image
+                          src={clientImages[index] && clientImages[index].startsWith("http")
+                            ? clientImages[index]
+                            : "/placeholder.png"}
+                          alt={`Client Image ${index + 1}`}
+                          width={76}
+                          height={76}
+                          objectFit="cover"
+                          style={{ borderRadius: "50px" }}
+                        />
+                      </label> */}
                       <TextField
                         placeholder="Client Name"
-                        value={client.name}
-                        onChange={(e) => handleClientNameChange(index, e.target.value)}
+                        value={client}
+                        onChange={(e) => handleClientChange(index, e.target.value)}
                         sx={{
                           mt: 2,
                           border: 'none',
@@ -438,7 +758,7 @@ const AddBrand: React.FC = () => {
                       borderColor: '#CBBC87',
                       borderRadius: '50px',
                     }}
-                    onClick={addClient}
+                    onClick={addClients}
                   >
                     Add Client
                   </Button>
@@ -450,6 +770,7 @@ const AddBrand: React.FC = () => {
               <Divider sx={{ border: '.5px solid #ccc ' }} />
               <Button
                 variant="outlined"
+                onClick={handleClientSaveSection}
                 style={{
                   width: '202px',
                   height: '46px',
@@ -465,6 +786,7 @@ const AddBrand: React.FC = () => {
           </Box>
           <Button
             variant="contained"
+            onClick={handleAddGallary}
             style={{
               width: '202px',
               height: '46px',
@@ -473,7 +795,7 @@ const AddBrand: React.FC = () => {
               borderRadius: '50px',
             }}
           >
-            Save Section
+            Save Gallary
           </Button>
         </Grid>
       </RootLayout>

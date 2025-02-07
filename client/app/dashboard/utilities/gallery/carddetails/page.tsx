@@ -1,11 +1,13 @@
 // pages/details.tsx
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, Button, List, ListItem, Divider, TextField } from '@mui/material';
 import RootLayout from '../../../page'; // Adjust the import path as needed
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png'; // Adjust the import path as needed
+import { Trykker } from 'next/font/google';
+import { getGallary } from '@/app/api/gallary/page';
 
 const DetailsPage: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
@@ -29,6 +31,17 @@ const DetailsPage: React.FC = () => {
     setContent({ ...content, [field]: event.target.value });
   };
 
+  useEffect(() => {
+    const fetchGallary = async () => {
+      try {
+        const fetchData = await getGallary();
+        console.log(fetchData);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchGallary();
+  })
   return (
     <RootLayout>
       <Box sx={{ p: 0, backgroundColor: '#F5F6FA' }}>
@@ -168,9 +181,9 @@ const DetailsPage: React.FC = () => {
           {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
           {editMode && (
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-              <Button 
-              variant="outlined"
-              sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
+              <Button
+                variant="outlined"
+                sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
               >Edit Section</Button>
             </Box>
           )}
@@ -361,9 +374,9 @@ const DetailsPage: React.FC = () => {
           {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
           {editMode && (
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-              <Button 
-              variant="outlined"
-              sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
+              <Button
+                variant="outlined"
+                sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
               >Edit Section</Button>
             </Box>
           )}
@@ -487,9 +500,9 @@ const DetailsPage: React.FC = () => {
           {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
           {editMode && (
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-              <Button 
-              variant="outlined"
-              sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
+              <Button
+                variant="outlined"
+                sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
               >Edit Section</Button>
             </Box>
           )}

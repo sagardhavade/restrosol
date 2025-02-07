@@ -1,0 +1,24 @@
+import axios from 'axios';
+// Create a new job post
+export const addGallary = async (formData: any) => {
+    try {
+        console.log("asdasda", formData);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/gallary`, formData);
+        console.log("asdasda", response);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating gallary:', error);
+        throw error;
+    }
+};
+
+export const getGallary = async () => {
+    try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/gallary`);
+        console.log(response.data);
+        return response.data;
+    } catch (err) {
+        console.error('Error get Response Data', err);
+        throw err;
+    }
+}

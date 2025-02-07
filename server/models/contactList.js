@@ -28,6 +28,10 @@ const contactListSchema = new Schema({
     type: String,
     required: [true, 'Type is required']
   },
+  message: {
+    type: String,
+    required: false,
+  },
   status: {
     type: String,
     enum: ['pending', 'resolve', 'close'],

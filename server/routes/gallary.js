@@ -2,34 +2,80 @@ const express = require('express');
 const router = express();
 const multer = require('multer');  // Import multer
 const Gallary  = require('../models/gallary');
+const AddBrand = require('../models/addBrand')
+const cors = require("cors");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("cloudinary").v2;
 
-// Set up multer storage (you can adjust this to your needs)
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// POST route for creating a new resume
-router.post('/', upload.single('image'), async (req, res) => {
-    try {
-        const { title,description,categoryId,image } = req.body;
 
-        // Create a new Gallary instance
+// 🔹 Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  // 🔹 Configure Multer Storage
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "Gallary",
+      allowedFormats: ["jpg", "png", "jpeg"],
+    },
+  });
+  const upload = multer({ storage });
+  
+// 🔹 POST route for uploading images
+// router.post("/",upload.fields([ { name: "images", maxCount: 5 }, { name: "clientImage", maxCount: 2 }]), async (req, res) => {
+    router.post("/",upload.fields([ { name: "images", maxCount: 5 }]), async (req, res) => {
+      try {
+        const { category, brandName, brandDescription, description, points, clientDescription, clientName } = req.body;
+        console.log("re log",req.body)
+        // 🔹 Handling multiple product images
+        let imageUrls = [];
+        if (req.files["images"]) {
+          imageUrls = req.files["images"].map((file) => file.path); // Store multiple product images
+        }
+  
+        // 🔹 Handling multiple client images
+        let clientImageUrls = [];
+        if (req.files["clientImage"]) {
+          clientImageUrls = req.files["clientImage"].map((file) => file.path); // Store multiple client images
+        }
+  
+        // 🔹 Create a new Gallary instance
         const gallary = new Gallary({
-            title,
-            description,            
-            categoryId,
-            image: {
-                data: req.file.buffer,  // Store the file as Buffer
-                contentType: req.file.mimetype  // Store the file type
-            }
+          category:category,
+          brandName:brandName,
+          brandDescription:brandDescription,
+          description:description,
+          points:points,          
+          clientDescription,
+          clientName: clientName ? clientName.split(",") : [], // Convert CSV to array
+          images: imageUrls, // Store multiple product images
+        //   clientImage: clientImageUrls, // Store multiple client images
         });
-
+  console.log("serwef",gallary);
         await gallary.save();
         res.status(201).json(gallary);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    }
+  );
+  // POST route for creating a new resume
+router.post('/addBrand', async (req, res) => {
+    try {
+        const addBrand = new AddBrand(req.body);
+        await addBrand.save();
+        res.status(201).json(addBrand);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
-
 // PUT route for updating an existing resume
 router.put('/:id', upload.single('image'), async (req, res) => {
     try {

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
 import { addContact } from '@/lib/features/contactSlice';
+import { getInTouch } from '@/app/api/GetInTouch/page';
 
 interface PopupProps {
   show: boolean;
@@ -36,36 +37,62 @@ const Popup: React.FC<PopupProps> = ({ show, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e: MouseEvent<HTMLDivElement>) => {
+  const handleSubmit = async (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
+    // Validate form inputs
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error('All fields are required.');
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
     const sendMessages = {
       name: formData.name,
       email: formData.email,
       message: formData.message,
       type: 'contact',
-      status: 'resolve', 
+      status: 'resolve',
       date: new Date().toISOString(),
     };
 
-    dispatch(
-      addContact({
-        payload: sendMessages,
-        onSuccess: (data: any) => {
-          console.log('Success callback:', data);
-          toast.success('Message sent successfully');
-          setFormData({
-            name: '',
-            email: '',
-            message: '',
-          });
-        },
-        onFailure: (error: any) => {
-          console.error('Error callback:', error);
-          toast.error('Failed to send message. Please try again.');
-        },
-      })
-    );
+    // dispatch(
+    //   addContact({
+    //     payload: sendMessages,
+    //     onSuccess: (data: any) => {
+    //       console.log('Success callback:', data);
+    //       toast.success('Message sent successfully');
+    //       setFormData({
+    //         name: '',
+    //         email: '',
+    //         message: '',
+    //       });
+    //     },
+    //     onFailure: (error: any) => {
+    //       console.error('Error callback:', error);
+    //       toast.error('Failed to send message. Please try again.');
+    //     },
+    //   })
+    // );
+
+    try {
+      // Call the API with the sendMessages data
+      const response = await getInTouch(sendMessages);
+      console.log('API response:', response);
+
+      toast.success('Message sent successfully');
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+      });
+    } catch (error) {
+      console.error('Error sending message to API:', error);
+      toast.error('Failed to send message. Please try again.');
+    }
   };
 
   if (!show) {
@@ -132,7 +159,7 @@ const Popup: React.FC<PopupProps> = ({ show, onClose }) => {
                 required
               />
               <div className="submit_button" onClick={handleSubmit} style={{ opacity: loading ? 0.5 : 1 }}>
-              {loading ? <CircularProgress size={24} />:'send '}
+                {loading ? <CircularProgress size={24} /> : 'send '}
               </div>
             </div>
           </div>

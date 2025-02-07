@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import RootLayout from '../../page';
 import { Box, Button, Paper, Typography, Grid, TextField, IconButton } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
@@ -7,9 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from 'next/image';
-import { data as initialData, TestimonialData } from './TestimonialData'; // Import from the correct path
+// import { data as initialData, TestimonialData } from './TestimonialData'; // Import from the correct path
 import Replace from '@/public/images/Replace.png';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import { getClientTestomonials } from '@/app/api/clientTestomonial/page';
 
 const theme = createTheme({
   components: {
@@ -22,17 +23,36 @@ const theme = createTheme({
     },
   },
 });
+export interface TestimonialData {
+  image: string; // Change the type to string
+  name: string;
+  destination: string;
+  message: string;
+}
 
 const Testimonial: React.FC = () => {
-  const [data, setData] = useState<TestimonialData[]>(initialData);
+  const [data, setData] = useState<TestimonialData[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState<TestimonialData>({
-    image: initialData[0].image,
-    clientName: '',
-    position: '',
-    clientMessage: '',
+    image: '',
+    name: '',
+    destination: '',
+    message: '',
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getClientTestomonials();
+
+        setData(data);
+
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData()
+  }, [])
   // Image change
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -64,6 +84,7 @@ const Testimonial: React.FC = () => {
   };
 
   const handleEdit = (index: number) => {
+    console.log(index);
     setEditIndex(index);
     setFormData(data[index]);
   };
@@ -157,7 +178,9 @@ const Testimonial: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
+
             {data.map((client, index) => (
+
               <TableRow key={index}>
                 <TableCell style={{ borderBottom: '1px solid #ccc', borderRight: '1px solid #ccc', position: 'relative' }}>
                   <Box
@@ -169,7 +192,7 @@ const Testimonial: React.FC = () => {
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
                   >
-                    <Image src={client.image} alt={client.clientName} width={50} height={60} />
+                    <Image src={client.image} alt={client.name} width={50} height={60} />
                     {editIndex === index && hovered && (
                       <Tooltip title="Upload Image">
                         <IconButton
@@ -193,27 +216,27 @@ const Testimonial: React.FC = () => {
                 <TableCell style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', color: '#000' }}>
                   {editIndex === index ? (
                     <ThemeProvider theme={theme}>
-                      <TextField name="clientName" value={formData.clientName} onChange={handleChange} fullWidth />
+                      <TextField name="name" value={formData.name} onChange={handleChange} fullWidth />
                     </ThemeProvider>
                   ) : (
-                    client.clientName
+                    client.name
                   )}
                 </TableCell>
                 <TableCell style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', color: '#000' }}>
                   {editIndex === index ? (
                     <ThemeProvider theme={theme}>
-                      <TextField name="position" value={formData.position} onChange={handleChange} fullWidth />
+                      <TextField name="destination" value={formData.destination} onChange={handleChange} fullWidth />
                     </ThemeProvider>
                   ) : (
-                    client.position
+                    client.destination
                   )}
                 </TableCell>
                 <TableCell style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', color: '#000' }}>
                   {editIndex === index ? (
                     <ThemeProvider theme={theme}>
                       <TextField
-                        name="clientMessage"
-                        value={formData.clientMessage}
+                        name="message"
+                        value={formData.message}
                         onChange={handleChange}
                         multiline
                         rows={4}
@@ -221,7 +244,7 @@ const Testimonial: React.FC = () => {
                       />
                     </ThemeProvider>
                   ) : (
-                    client.clientMessage
+                    client.message
                   )}
                 </TableCell>
                 <TableCell style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
@@ -249,7 +272,7 @@ const Testimonial: React.FC = () => {
         {open && (
           <Box
             sx={{
-              position: 'fixed',
+              destination: 'fixed',
               top: '50%',
               left: '80%',
               transform: 'translate(-50%, -50%)',
@@ -306,7 +329,7 @@ const Testimonial: React.FC = () => {
         {open && (
           <Box
             sx={{
-              position: 'fixed',
+              destination: 'fixed',
               top: 0,
               left: 0,
               width: '100%',

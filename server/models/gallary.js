@@ -1,36 +1,60 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const gallarySchema = mongoose.Schema({
-  title: {
+  category: {
     type: String,
-    required: true,
+    required: true
+  },
+  brandName: {
+    type: String,
+    required: true
+  },
+  brandDescription: {
+    type: String,
+    default: ''
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
-  categoryId: {
-    type: mongoose.Schema.Types.ObjectId, // Use ObjectId
-    ref: "categories", // Reference the Category model
+  points: [{
+    type: String
+
+  }],
+  // categoryId: {
+  //   type: mongoose.Schema.Types.ObjectId, // Use ObjectId
+  //   ref: "categories", // Reference the Category model
+  // },
+  // image: {
+  //   data: Buffer,
+  //   contentType: String,
+  // },
+  images: [{
+    type: String
+  }],
+  clientDescription: {
+    type: String
   },
-  image: {
-    data: Buffer,
-    contentType: String,
-  },
+  clientName: [{
+    type: String
+  }],
+  clientImage: [ {
+    type: String
+  }],
   dateCreated: {
     type: Date,
-    default: Date.now,
-  },
-});
+    default: Date.now
+  }
+})
 
 // Virtual for "id" field
-gallarySchema.virtual("id").get(function () {
-  return this._id.toHexString();
-});
+gallarySchema.virtual('id').get(function () {
+  return this._id.toHexString()
+})
 
 // Include virtual fields in JSON output
-gallarySchema.set("toJSON", {
-  virtuals: true,
-});
+gallarySchema.set('toJSON', {
+  virtuals: true
+})
 
-module.exports = mongoose.model("Gallary", gallarySchema);
+module.exports = mongoose.model('Gallary', gallarySchema)
