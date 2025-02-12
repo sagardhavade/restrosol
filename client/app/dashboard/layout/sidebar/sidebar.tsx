@@ -10,7 +10,11 @@ interface MenuItem {
   href: string;
   icon: JSX.Element;
 }
-
+interface SidebarProps {
+  isMobileSidebarOpen: boolean;
+  onSidebarClose: () => void;
+  isSidebarOpen: boolean;
+}
 const theme = createTheme({
   typography: {
     fontFamily: 'Nunito Sans, sans-serif',
@@ -49,7 +53,9 @@ const theme = createTheme({
   },
 });
 
-const Sidebar: React.FC = () => {
+// const Sidebar: React.FC = () => {
+  const Sidebar: React.FC<SidebarProps> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
+
   const [activeItem, setActiveItem] = useState<string>('');
 
   const handleItemClick = (href: string) => {

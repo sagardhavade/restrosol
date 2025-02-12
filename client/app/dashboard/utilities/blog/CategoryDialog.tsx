@@ -119,7 +119,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { getCategory } from '@/app/api/category/page';
+import { getCategory } from '@/app/api/category/pageApi';
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {

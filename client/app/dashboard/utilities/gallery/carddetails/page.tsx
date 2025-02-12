@@ -7,7 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png'; // Adjust the import path as needed
 import { Trykker } from 'next/font/google';
-import { getGallary } from '@/app/api/gallary/page';
+import { getGallary } from '@/app/api/gallary/pageApi';
 import { ArrowBack } from '@mui/icons-material';
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link';

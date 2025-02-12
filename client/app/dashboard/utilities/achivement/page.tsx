@@ -19,7 +19,7 @@ import { Margin } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import { addAchievement, deleteAchievement, getAchievement, updateAchievement } from '@/app/api/achievement/page';
+import { addAchievement, deleteAchievement, getAchievement, updateAchievement } from '@/app/api/achievement/pageApi';
 
 interface Row {
   id:string;
@@ -469,6 +469,8 @@ fetchData();
                         <Image
                           src={image}
                           alt="Preview"
+                          width={100}
+                          height={100}
                           style={{
                             maxWidth: '100%',
                             maxHeight: '200px',
@@ -480,7 +482,7 @@ fetchData();
                     ) : (
                       <Box sx={{ marginBottom: 2 }}>
                         <Image
-                          src="https://via.placeholder.com/100"
+                          src=""
                           alt="Placeholder"
                           width={100}
                           height={100}

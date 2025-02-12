@@ -7,7 +7,7 @@ import Link from 'next/link';
 import frame2 from '../../../public/images/right.svg';
 import frame3 from '../../../public/images/Image.svg';
 import View_all from '../common/view_all';
-import { getGallary } from '@/app/api/gallary/page';
+import { getGallary } from '@/app/api/gallary/pageApi';
 const menu = ['All', 'Mega Kitchen', 'Cloud Kitchen', 'QSR,Cafe', 'Casual', 'Bar,Launge'];
 
 interface gallary {

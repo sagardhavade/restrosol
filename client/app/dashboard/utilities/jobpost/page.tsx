@@ -7,7 +7,7 @@ import JobCard from './component/jobcard'; // Adjust the import path as necessar
 import { jobData } from './component/jobData'; // Adjust the import path as necessary
 import dayjs from 'dayjs';
 import JobForm from './component/JobForm'; // Adjust the import path as necessary
-import { getJobPosts, updateJobPost, createJobPost } from '../../../api/jobPost/jobpost';
+import { getJobPosts, updateJobPost, createJobPost } from '../../../api/jobPost/jobpostApi';
 const Page: React.FC = () => {
   const [showJobForm, setShowJobForm] = useState<boolean>(false);
   const [jobs, setJobs] = useState<any[]>([]);

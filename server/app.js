@@ -61,7 +61,7 @@ mongoose.Promise = global.Promise
 
 // Connecting to the database
 mongoose
-  .connect(dbConfig.url, {
+  .connect(dbConfig.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

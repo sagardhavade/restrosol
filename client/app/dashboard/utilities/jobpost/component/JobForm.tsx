@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography, Grid, Snackbar } from '@mui/materia
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import BusinessCenterRoundedIcon from '@mui/icons-material/BusinessCenterRounded';
-import { createJobPost } from '../../../../api/jobPost/jobpost';
+import { createJobPost } from '../../../../api/jobPost/jobpostApi';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

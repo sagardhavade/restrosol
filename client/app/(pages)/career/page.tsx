@@ -8,7 +8,7 @@ import './style/style.css';
 import Founder from '../aboutus/founder';
 import Meet_talent from './meet_talent';
 import Link from 'next/link';
-import { getJobPosts } from '@/app/api/jobPost/jobpost';
+import { getJobPosts } from '@/app/api/jobPost/jobpostApi';
 interface JobPost {
   id: string;
   dateCreated: string;

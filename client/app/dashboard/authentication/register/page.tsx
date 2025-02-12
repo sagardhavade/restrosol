@@ -16,6 +16,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUsersStart, registerUsersFailure, registerUsersSuccess } from '@/lib/features/userSlice';
+import { register } from '@/app/api/users/pageApi';
+
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -33,23 +35,30 @@ const Register: React.FC = () => {
     setFormValid(email !== '' && username !== '' && password !== '' && termsAccepted);
   }, [email, username, password, termsAccepted]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const payload = { email, username, password };
-
-    dispatch(
-      registerUsersStart({
-        payload,
-        onSuccess: (data: any) => {
-          console.log('Success callback:', data);
-          router.push('/dashboard/authentication/login');
-        },
-        onFailure: (error: any) => {
-          console.error('Error callback:', error);
-          dispatch(registerUsersFailure(error));
-        },
-      }),
-    );
+     const payload = { email, username, password };
+    //   try{
+        const registerapi = await register(payload);
+        router.push('/dashboard/authentication/login');
+    //   }catch(err)
+    //   {
+    //     console.log(err);
+    //   }
+    // }
+    // dispatch(
+    //   registerUsersStart({
+    //     payload,
+    //     onSuccess: (data: any) => {
+    //       console.log('Success callback:', data);
+    //       router.push('/dashboard/authentication/login');
+    //     },
+    //     onFailure: (error: any) => {
+    //       console.error('Error callback:', error);
+    //       dispatch(registerUsersFailure(error));
+    //     },
+    //   }),
+    // );
   };
 
   return (

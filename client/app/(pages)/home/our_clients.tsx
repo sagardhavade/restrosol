@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import logo1 from '@/public/images/Frame 386.svg';
 import logo from '@/public/images/Frame 38619.svg';
-import { getClientTestomonials } from '@/app/api/clientTestomonial/page';
+import { getClientTestomonials } from '@/app/api/clientTestomonial/pageApi';
 type Client = {
   id: string;
   name: string;

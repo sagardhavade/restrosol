@@ -8,7 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/page';
+import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/pageApi';
 import { useSearchParams } from 'next/navigation'
 interface Client {
   name: string;
@@ -916,6 +916,8 @@ const AddBrand: React.FC = () => {
                             <Image
                               src={clientImage[index]} // Use the image for the specific client
                               alt="Client Image"
+                              width={50}
+                              height={50}
                               style={{
                                 width: "50px",
                                 height: "50px",

@@ -10,7 +10,7 @@ import Image from 'next/image';
 // import { data as initialData, TestimonialData } from './TestimonialData'; // Import from the correct path
 import Replace from '@/public/images/Replace.png';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
-import { createClientTestomonial, deleteClientTestomonial, getClientTestomonials, updateClientTestomonial } from '@/app/api/clientTestomonial/page';
+import { createClientTestomonial, deleteClientTestomonial, getClientTestomonials, updateClientTestomonial } from '@/app/api/clientTestomonial/pageApi';
 
 const theme = createTheme({
   components: {
@@ -502,6 +502,8 @@ const Testimonial: React.FC = () => {
                       <Image
                         src={image}
                         alt="Preview"
+                        width={100}
+                        height={100}
                         style={{
                           maxWidth: '100%',
                           maxHeight: '200px',
@@ -513,7 +515,7 @@ const Testimonial: React.FC = () => {
                   ) : (
                     <Box sx={{ marginBottom: 2 }}>
                       <Image
-                        src="https://via.placeholder.com/100"
+                        src=""
                         alt="Placeholder"
                         width={100}
                         height={100}

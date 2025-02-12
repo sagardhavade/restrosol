@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
 import { addContact } from '@/lib/features/contactSlice';
-import { getInTouch } from '@/app/api/GetInTouch/page';
+import { getInTouch } from '@/app/api/GetInTouch/pageApi';
 
 interface PopupProps {
   show: boolean;

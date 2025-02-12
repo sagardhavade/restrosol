@@ -5,6 +5,12 @@ import { UiLayout } from './ui-layout';
 import StoreProvider from './storeProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ReactNode } from 'react';
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
 
 export const roboto = Roboto({
   weight: ['100', '300', '400', '500', '700'],
@@ -15,7 +21,8 @@ export const metadata = {
   title: 'Restrosol',
   description: 'Restaturant Consulting',
 };
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// export default function RootLayout({ children }: { children: React.ReactNode }) {
+  export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>

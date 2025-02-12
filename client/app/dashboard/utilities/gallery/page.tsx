@@ -119,7 +119,7 @@ import RootLayout from '../../page';
 import { Box, Button, Typography } from '@mui/material';
 import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined';
 import { Grid, Card, CardContent, CardMedia } from '@mui/material';
-import { getGallary } from '@/app/api/gallary/page';
+import { getGallary } from '@/app/api/gallary/pageApi';
 import Link from 'next/link';
 
 

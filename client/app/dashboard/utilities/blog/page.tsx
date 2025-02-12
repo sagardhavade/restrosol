@@ -8,7 +8,7 @@ import Replace from '@/public/images/Replace.png';
 import { StaticImageData } from 'next/image';
 import BlogPostCard from './BlogPostCard';
 import Link from 'next/link';
-import { getBlog } from '@/app/api/blog/page';
+import { getBlog } from '@/app/api/blog/pageApi';
 
 interface BlogPost {
   id: string;

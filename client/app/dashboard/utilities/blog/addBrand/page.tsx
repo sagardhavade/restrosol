@@ -8,10 +8,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/page';
+import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/pageApi';
 import { useSearchParams } from 'next/navigation'
 import { AddBusinessOutlined } from '@mui/icons-material';
-import { addBlog, getBlog, updateBlog } from '@/app/api/blog/page';
+import { addBlog, getBlog, updateBlog } from '@/app/api/blog/pageApi';
 
 interface brandSection {
   category: string;

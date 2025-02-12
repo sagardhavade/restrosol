@@ -8,7 +8,7 @@ import frame1 from '@/public/images/Image.svg';
 import frame_logo from '@/public/images/Union1.svg';
 import logo from '@/public/images/Check circle.svg';
 import { useState, useEffect } from 'react';
-import { getGallary } from '@/app/api/gallary/page';
+import { getGallary } from '@/app/api/gallary/pageApi';
 import { useSearchParams } from 'next/navigation'
 import CheckIcon from "@mui/icons-material/Check"; // Import MUI Check Icon
 

@@ -7,7 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RootLayout from '@/app/dashboard/page';
 import Comments from './Comments';
 import { useSearchParams } from 'next/navigation'
-import { getBlog } from '@/app/api/blog/page';
+import { getBlog } from '@/app/api/blog/pageApi';
 import Link from 'next/link';
 const BlogPostDetails: React.FC = () => {
 

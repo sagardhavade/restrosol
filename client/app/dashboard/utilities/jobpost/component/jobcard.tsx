@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, Button, Grid, Box, TextField } from '@mu
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 
-import { getJobPosts, updateJobPost } from '../../../../api/jobPost/jobpost';
+import { getJobPosts, updateJobPost } from '../../../../api/jobPost/jobpostApi';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
