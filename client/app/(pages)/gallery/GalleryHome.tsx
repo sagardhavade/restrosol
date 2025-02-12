@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Excited from '../common/faq_excited';
 import './style/style.css';
 import Image from 'next/image';
@@ -7,23 +7,69 @@ import Link from 'next/link';
 import frame2 from '../../../public/images/right.svg';
 import frame3 from '../../../public/images/Image.svg';
 import View_all from '../common/view_all';
+import { getGallary } from '@/app/api/gallary/page';
 const menu = ['All', 'Mega Kitchen', 'Cloud Kitchen', 'QSR,Cafe', 'Casual', 'Bar,Launge'];
+
+interface gallary {
+  id: string[],
+  sectionImage: string,
+  brandName: string[],
+  brandDescription: string[],
+  category: string; // Add category field for Domestic or International
+}
 function GalleryHome() {
   const [isVisible, setIsVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [galleryData, setGalleryData] = useState<gallary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filteredData, setFilteredData] = useState<gallary[]>([]); // State to hold filtered data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getGallary(); // Assuming `getGallary` is your API call function
+        setGalleryData(response); // Set the API response in the state
+        setLoading(false); // Set loading to false once the data is fetched
+      } catch (err) {
+        // setError();
+        setLoading(false); // Set loading to false if there was an error
+      }
+    };
+    fetchData(); // Call the fetch function when the component mounts
+  }, []); // Empty dependency array to run only once when component mounts
+
+
+
+  // const showDiv = () => {
+  //   setIsVisible(true);
+  //   setVisible(false);
+  // };
+
+  // const hideDiv = () => {
+  //   setIsVisible(false);
+  //   setVisible(true);
+  // };
+
   const showDiv = () => {
     setIsVisible(true);
     setVisible(false);
+    // Filter for Domestic category
+    setFilteredData(galleryData.filter(item => item.category === 'Domestic'));
   };
 
   const hideDiv = () => {
     setIsVisible(false);
     setVisible(true);
+    // Filter for International category
+    setFilteredData(galleryData.filter(item => item.category === 'international'));
   };
   const goToNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex === menu.length - 1 ? 0 : prevIndex + 1));
   };
+
 
   return (
     <>
@@ -31,7 +77,7 @@ function GalleryHome() {
         <div>
           <div className="top_section_title">Glimpses of our clients we worked for</div>
           <div className="top_section_paragraph">
-          An overview of the diverse clients we have collaborated with, both locally and globally.
+            An overview of the diverse clients we have collaborated with, both locally and globally.
           </div>
         </div>
         <div className="top_resturant_section">
@@ -62,90 +108,22 @@ function GalleryHome() {
             </div>
           </div>
           <div className="image_card_container">
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
+            {filteredData.map((item, index) => (
+              // <Link href={`/gallery/id=${item.id}`} className="image_category_card" key={index}>
+              <Link key={index}  href={{ pathname: '/gallery/Gallery_details/', query: { id: item.id } }} passHref>
+
+                <div className="image_category_img">
+                  <Image src={item.sectionImage[0] || frame3} alt="Logo" width={200} height={200} />
                 </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
+                <div className="image_category_text">
+                  <div className="image_title">{item.brandName}</div>
+                  <div className="image_paragraph">{item.brandDescription}</div>
+                  <Link href="#" className="learn_more">
+                    Learn more &#8594;
+                  </Link>
                 </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
           <View_all />
         </div>
@@ -168,62 +146,21 @@ function GalleryHome() {
             </div>
           </div>
           <div className="image_card_container">
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
+            {filteredData.map((item, index) => (
+              // <Link href={`/gallery/${item.id}`} className="image_category_card" key={index}>
+              <Link key={index} href={{ pathname: '/gallery/Gallery_details/', query: { id: item.id } }} passHref>
+                <div className="image_category_img">
+                  <Image src={item.sectionImage[0] || frame3} alt="Logo" width={200} height={200} />
                 </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
+                <div className="image_category_text">
+                  <div className="image_title">{item.brandName}</div>
+                  <div className="image_paragraph">{item.brandDescription}</div>
+                  <Link href="#" className="learn_more">
+                    Learn more &#8594;
+                  </Link>
                 </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
-            <Link href="/gallery/rest1" className="image_category_card">
-              <div className="image_category_img">
-                <Image src={frame3} alt="Logo" width={66} height={66} />
-              </div>
-              <div className="image_category_text">
-                <div className="image_title">Rest 1</div>
-                <div className="image_paragraph">
-                  Lorem ipsum dolor sit amet consectoli tur adipiscing elit semper dalar.
-                </div>
-                <Link href="#" className="learn_more">
-                  Learn more &#8594;
-                </Link>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
           <View_all />
         </div>

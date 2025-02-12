@@ -1,8 +1,37 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import logo1 from '@/public/images/Frame 386.svg';
 import logo from '@/public/images/Frame 38619.svg';
+import { getClientTestomonials } from '@/app/api/clientTestomonial/page';
+type Client = {
+  id: string;
+  name: string;
+  destination: string;
+  image: string;
+  message:string;
+};
+
 function Our_clients() {
+
+  const [content, setContent] = useState<Client[]>([]);
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        const data = await getClientTestomonials();
+        console.log(data);
+        // const clientsData: Client[] = await response.json(); // Ensure the API returns an array
+        setContent(data);
+
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="clients_section">
@@ -20,27 +49,16 @@ function Our_clients() {
           <div className="client_bottom_line"></div>
         </div>
         <div className="client_details">
-          <div className="client_user_details">
-            <Image src={logo} alt="Logo" width={48} height={48} />
-            <div>
-              <div className="client_user_name">AJIT KUMAR SAHOO</div>
-              <div className="client_user_profile">Chief Culinary Director</div>
-            </div>
+        {content.map((client) => (
+        <div key={client.id} className="client_user_details">
+          <Image src={client.image} alt={client.name} width={48} height={48} />
+          <div>
+            <div className='client_user_profile'>{client.message} </div>
+            <div className="client_user_name">{client.name}</div>
+            <div className="client_user_profile">{client.destination}</div>
           </div>
-          <div className="client_user_details">
-            <Image src={logo1} alt="Logo" width={48} height={48} />
-            <div>
-              <div className="client_user_name">Gaurav Sharma</div>
-              <div className="client_user_profile">Operational Director</div>
-            </div>
-          </div>
-          <div className="client_user_details">
-            <Image src={logo} alt="Logo" width={48} height={48} />
-            <div>
-              <div className="client_user_name">AJIT KUMAR SAHOO</div>
-              <div className="client_user_profile">Chief Culinary Director</div>
-            </div>
-          </div>
+        </div>
+      ))}
         </div>
       </div>
     </>

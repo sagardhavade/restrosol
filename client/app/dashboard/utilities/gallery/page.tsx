@@ -116,10 +116,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import RootLayout from '../../page';
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined';
 import { Grid, Card, CardContent, CardMedia } from '@mui/material';
 import { getGallary } from '@/app/api/gallary/page';
+import Link from 'next/link';
+
 
 // Define interface for API data
 export interface GalleryProduct {
@@ -158,7 +160,7 @@ const GalleryPage: React.FC = () => {
           title: item.clientName[0] || 'No Title',
           subtitle: item.brandName || 'No Brand',
           description: item.description || 'No Description',
-          image: item.images?.[0] || '/images/Replace.png',
+          image: item.sectionImage?.[0] || '/images/Replace.png',
           button: 'View more',
           category: item.category.toLowerCase() === 'domestic' ? 'domestic' : 'international', // Normalize category
         }));
@@ -176,7 +178,8 @@ const GalleryPage: React.FC = () => {
     <RootLayout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Nunito Sans' }}>
         <Typography variant="h1">Gallery</Typography>
-        <Link href="/dashboard/utilities/gallery/addBrand" underline="none">
+        {/* <Link href="/dashboard/utilities/gallery/addBrand" underline="none"> */}
+        <Link href="/dashboard/utilities/gallery/addBrand" passHref>
           <Button variant="contained" sx={{
             borderRadius: '20px',
             height: '46px',
@@ -233,12 +236,20 @@ const GalleryPage: React.FC = () => {
                 <Typography variant="body2" color="text.secondary" sx={{ color: '#000' }}>
                   {product.description}
                 </Typography>
-                <Link href="/dashboard/utilities/gallery/carddetails" underline="none">
+                {/* <Link href="/dashboard/utilities/gallery/carddetails/" underline="none">
                   <Button size="small">
                     {product.button}
                     <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} />
                   </Button>
+                </Link> */}
+                <Link href={{ pathname: '/dashboard/utilities/gallery/carddetails', query: { id: product.id } }} passHref>
+                  <Button size="small" component="a">
+                    {product.button}
+                    <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} />
+                  </Button>
                 </Link>
+
+
               </CardContent>
             </Card>
           </Grid>

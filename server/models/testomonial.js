@@ -10,9 +10,10 @@ const testomonialSchema = mongoose.Schema({
     required: true,
   },  
   image: {
-    data: Buffer,
-    contentType: String
-    
+    type:String,
+  },
+  message:{
+    type:String,
   },
   dateCreated: {
     type: Date,

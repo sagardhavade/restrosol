@@ -149,7 +149,7 @@ const Comments: React.FC = () => {
         <Button variant="outlined">Load More...</Button>
       </LoadMoreButton>
       <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
-        <Button
+        {/* <Button
           variant="contained"
           sx={{
             backgroundColor: '#CBBC87',
@@ -160,7 +160,7 @@ const Comments: React.FC = () => {
           }}
         >
           Save
-        </Button>
+        </Button> */}
       </Box>
     </CommentSection>
   );

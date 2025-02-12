@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RootLayout from '../../page';
 import CategoryDialog from './CategoryDialog';
 import { Box, Button, Grid, Typography, Tab, Tabs } from '@mui/material';
@@ -7,64 +7,67 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Replace from '@/public/images/Replace.png';
 import { StaticImageData } from 'next/image';
 import BlogPostCard from './BlogPostCard';
+import Link from 'next/link';
+import { getBlog } from '@/app/api/blog/page';
 
 interface BlogPost {
-  id: number;
-  img: StaticImageData;
+  id: string;
+  sectionImage: string;
   title: string;
-  subtitle: string;
-  categoryBtn: string;
+  description: string;
+  category: string;
   date: string;
-  viewMoreBtn: string;
-  path: string;
+  // viewMoreBtn: string;
+  // path: string;
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    id: 1,
-    img: Replace,
-    title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
-    subtitle:
-      'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
-    categoryBtn: 'Category',
-    date: 'Jan 24, 2024',
-    viewMoreBtn: 'View More',
-    path: `/dashboard/utilities/blog/blogpost`,
-  },
-  {
-    id: 2,
-    img: Replace,
-    title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
-    subtitle:
-      'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
-    categoryBtn: 'Category',
-    date: 'Jan 24, 2024',
-    viewMoreBtn: 'View More',
-    path: `/blog/2`,
-  },
-  {
-    id: 3,
-    img: Replace,
-    title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
-    subtitle:
-      'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
-    categoryBtn: 'Category',
-    date: 'Jan 24, 2024',
-    viewMoreBtn: 'View More',
-    path: `/blog/3`,
-  },
-  {
-    id: 4,
-    img: Replace,
-    title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
-    subtitle:
-      'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
-    categoryBtn: 'Category',
-    date: 'Jan 24, 2024',
-    viewMoreBtn: 'View More',
-    path: `/blog/4`,
-  },
-];
+
+// const blogPosts: BlogPost[] = [
+//   {
+//     id: 1,
+//     img: Replace,
+//     title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
+//     subtitle:
+//       'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
+//     categoryBtn: 'Category',
+//     date: 'Jan 24, 2024',
+//     viewMoreBtn: 'View More',
+//     path: `/dashboard/utilities/blog/blogpost`,
+//   },
+//   {
+//     id: 2,
+//     img: Replace,
+//     title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
+//     subtitle:
+//       'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
+//     categoryBtn: 'Category',
+//     date: 'Jan 24, 2024',
+//     viewMoreBtn: 'View More',
+//     path: `/blog/2`,
+//   },
+//   {
+//     id: 3,
+//     img: Replace,
+//     title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
+//     subtitle:
+//       'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
+//     categoryBtn: 'Category',
+//     date: 'Jan 24, 2024',
+//     viewMoreBtn: 'View More',
+//     path: `/blog/3`,
+//   },
+//   {
+//     id: 4,
+//     img: Replace,
+//     title: 'How Can a Restaurant Consultant Help Improve Menu Development?',
+//     subtitle:
+//       'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
+//     categoryBtn: 'Category',
+//     date: 'Jan 24, 2024',
+//     viewMoreBtn: 'View More',
+//     path: `/blog/4`,
+//   },
+// ];
 
 const theme = createTheme({
   components: {
@@ -111,18 +114,36 @@ const Page = () => {
     setDialogOpen(false);
   };
 
+  const [blogPosts,setBlogPosts] = useState<BlogPost[]>([]);
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try{
+      const response = await getBlog();
+      console.log("aaaaaaaaaaa",response);
+      setBlogPosts(response);
+      }catch(err)
+      {
+        console.log(err);
+        throw err;
+      }
+    } 
+    fetchData();
+  },[]);
+
   return (
     <RootLayout>
       <Grid container style={{ fontFamily: 'Nunito Sans',backgroundColor:'#F5F6FA' }}>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 2 }}>
             <Typography variant="h1">Blog</Typography>
+            <Link href="/dashboard/utilities/blog/addBrand" passHref>
             <Button
               variant="contained"
               sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
             >
               + Add Brand
             </Button>
+            </Link>
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
@@ -158,13 +179,14 @@ const Page = () => {
         {blogPosts.map((post) => (
           <Grid item xs={12} sm={6} md={4} key={post.id}>
             <BlogPostCard
-              img={post.img}
+              sectionImage={post.sectionImage}
               title={post.title}
-              subtitle={post.subtitle}
-              categoryBtn={post.categoryBtn}
-              date={post.date}
-              viewMoreBtn={post.viewMoreBtn}
-              path={post.path}
+              description={post.description}
+              category={post.category}
+              date={post.date.split("T")[0]} // Extracting only the date part
+              id={post.id}
+              // viewMoreBtn={post.viewMoreBtn}
+              // path={post.path}
             />
           </Grid>
         ))}

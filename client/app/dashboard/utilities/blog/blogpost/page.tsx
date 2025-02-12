@@ -1,13 +1,36 @@
 'use client';
-import React, { useState } from 'react';
-import { Box, Typography, Card, CardContent, Grid, Button, TextField, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Card, CardContent, Grid, Button, TextField, Divider,List,ListItem } from '@mui/material';
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RootLayout from '@/app/dashboard/page';
 import Comments from './Comments';
-
+import { useSearchParams } from 'next/navigation'
+import { getBlog } from '@/app/api/blog/page';
+import Link from 'next/link';
 const BlogPostDetails: React.FC = () => {
+
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
+  console.log('Product ID:', id);  // Log the ID to verify
+  const [content, setContent] = useState({
+    category: '',
+    title: '',
+    description: '',
+    sectionDecription: '',
+    section1Title: '',
+    section1Decription: '',
+    section2Title: '',
+    section2Decription: '',
+    section3Title: '',
+    section3Decription: '',
+    section4Title: '',
+    section4Decription: ''
+
+  });
+  const [points, setPoints] = useState<string[]>([]);
+  const [sectionImage, setSectionImage] = useState<string[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [articleTitle, setArticleTitle] = useState<string>(
     'How Can a Restaurant Consultant Help Improve Menu Development?',
@@ -23,6 +46,46 @@ const BlogPostDetails: React.FC = () => {
     setIsEditMode(!isEditMode); // Toggle edit mode
   };
 
+  // Function to fetch gallery data
+ 
+  // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const fetchData = await getBlog(); // Replace with your actual fetch function
+        console.log(fetchData);
+  
+        if (id) {
+          const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
+          console.log("didsf", matchedItem);
+          if (matchedItem) {
+            setContent({
+              category: matchedItem.category || '',
+              title: matchedItem.title || '',
+              description: matchedItem.decription || '',
+              sectionDecription: matchedItem.sectionDecription || '',
+              section1Title: matchedItem.section1Title || '',
+              section1Decription: matchedItem.section1Decription || '',
+              section2Title: matchedItem.section2Title || '',
+              section2Decription: matchedItem.section2Decription || '',
+              section3Title: matchedItem.section3Title || '',
+              section3Decription: matchedItem.section3Decription || '',
+              section4Title: matchedItem.section4Title || '',
+              section4Decription: matchedItem.section4Decription || '',
+            });
+            setPoints(matchedItem.points || []);
+            setSectionImage(matchedItem.sectionImage);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchBlog(); // Call the fetch function once on mount
+  }, []); // Empty array ensures it runs only once when the component mounts
+
+
+
   return (
     <RootLayout>
       <Grid container maxWidth="lg" bgcolor={'#F5F6FA'} p={2}>
@@ -31,30 +94,32 @@ const BlogPostDetails: React.FC = () => {
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h4">Article</Typography>
-                <Button
-                  variant="contained"
-                  onClick={handleEditArticle}
-                  sx={{
-                    borderRadius: '20px',
-                    height: '46px',
-                    width: '202px',
-                    backgroundColor: '#CBBC87',
-                    border: '1px',
-                  }}
-                >
-                  {isEditMode ? 'Save' : 'Edit Article'}
-                </Button>
+                <Link href={{ pathname: '/dashboard/utilities/blog/addBrand', query: { id: id } }} passHref>
+                  <Button
+                    variant="contained"
+                    onClick={handleEditArticle}
+                    sx={{
+                      borderRadius: '20px',
+                      height: '46px',
+                      width: '202px',
+                      backgroundColor: '#CBBC87',
+                      border: '1px',
+                    }}
+                  >
+                    {isEditMode ? 'Save' : 'Edit Article'}
+                  </Button>
+                </Link>
               </Box>
               <Box sx={{ textAlign: 'center', mb: 2 }}>
                 <Button color="error" variant="outlined">
-                  Domestic
+                  {content.category}
                 </Button>
                 {isEditMode ? (
                   <>
                     <TextField
                       variant="outlined"
                       fullWidth
-                      value={articleTitle}
+                      value={content.title}
                       onChange={(e) => setArticleTitle(e.target.value)}
                       sx={{ mb: 2, borderColor: '#000' }}
                       InputProps={{
@@ -63,14 +128,14 @@ const BlogPostDetails: React.FC = () => {
                     />
                     <Divider sx={{ borderColor: '#000' }} />
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                      <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                         Edit Title
                       </Button>
                     </Box>
                   </>
                 ) : (
                   <Typography variant="h1" gutterBottom>
-                    {articleTitle}
+                    {content.title}
                   </Typography>
                 )}
               </Box>
@@ -85,7 +150,7 @@ const BlogPostDetails: React.FC = () => {
                         fullWidth
                         multiline
                         rows={4}
-                        value={articleContent}
+                        value={content.section1Title}
                         onChange={(e) => setArticleContent(e.target.value)}
                         sx={{ mb: 2 }}
                         InputProps={{
@@ -94,15 +159,15 @@ const BlogPostDetails: React.FC = () => {
                       />
                       <Divider sx={{ borderColor: '#000' }} />
                       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                        <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                           Edit Content
                         </Button>
                       </Box>
                     </>
                   ) : (
                     <>
-                      <Typography variant="h5">Restaurant Building Process for Beginners</Typography>
-                      <Typography variant="body1">{articleContent}</Typography>
+                      <Typography variant="h5">{content.section1Title}</Typography>
+                      <Typography variant="body1">{content.section1Decription}</Typography>
                     </>
                   )}
                 </CardContent>
@@ -129,15 +194,15 @@ const BlogPostDetails: React.FC = () => {
                           />
                           <Divider sx={{ borderColor: '#000' }} />
                           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                            <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                               Edit Section
                             </Button>
                           </Box>
                         </>
                       ) : (
                         <>
-                          <Typography variant="h5">Restaurant Building Process for Beginners</Typography>
-                          <Typography variant="body1">{sectionContent}</Typography>
+                          <Typography variant="h5">{content.section2Title}</Typography>
+                          <Typography variant="body1">{content.section2Decription}</Typography>
                         </>
                       )}
                     </CardContent>
@@ -162,15 +227,15 @@ const BlogPostDetails: React.FC = () => {
                           />
                           <Divider sx={{ borderColor: '#000' }} />
                           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                            <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                               Edit Section
                             </Button>
                           </Box>
                         </>
                       ) : (
                         <>
-                          <Typography variant="h5">Restaurant Building Process for Beginners</Typography>
-                          <Typography variant="body1">{sectionContent}</Typography>
+                          <Typography variant="h5">{content.section3Title}</Typography>
+                          <Typography variant="body1">{content.section3Decription}</Typography>
                         </>
                       )}
                     </CardContent>
@@ -207,7 +272,7 @@ const BlogPostDetails: React.FC = () => {
                       </Box>
                       <Divider sx={{ borderColor: '#000' }} />
                       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                        <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                           Edit Section
                         </Button>
                       </Box>
@@ -216,29 +281,33 @@ const BlogPostDetails: React.FC = () => {
                     <>
                       <Typography variant="h5">We Create Your Dream</Typography>
                       <Typography variant="body1">
-                        Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam
-                        sit nullam neque ultrices. Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit
-                        phasellus mollis sit aliquam sit nullam neque ultrices. Lorem ipsum dolor sit amet consectetur
-                        adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices. Lorem ipsum
-                        dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam
-                        neque ultrices.
+                        {content.sectionDecription}
                       </Typography>
                       <Box sx={{ mt: 5, p: 2 }}>
-                        <Typography variant="body1">
-                          <CheckCircleIcon /> We design websites that look amazing.
-                        </Typography>
-                        <Typography variant="body1">
-                          <CheckCircleIcon /> We design websites that look amazing.
-                        </Typography>
-                        <Typography variant="body1">
-                          <CheckCircleIcon /> We design websites that look amazing.
-                        </Typography>
+                        {/* {(points?.[0] || "").split(",").map((item, index) => (
+                          <Typography variant="body1" key={index}>
+                            <CheckCircleIcon sx={{ marginRight: 1, color: "green" }} /> {item.trim()}
+                          </Typography>
+                        ))} */}
+                        <List sx={{ flexDirection: 'column', fontWeight: '700' }}>
+                          {points
+                            .join(',')  // Join the array into a single string
+                            .split(',') // Split by comma into individual items
+                            .map((point, index) => (
+                              <ListItem key={index} sx={{ mt: -2 }}>
+                                <CheckCircleIcon sx={{ color: 'green', height: '16px', fontSize: '16px', mr: 1 }} />
+                                {point.trim()} {/* Trim to remove any extra spaces */}
+                              </ListItem>
+                            ))}
+                        </List>
+
                       </Box>
                     </>
                   )}
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', order: { xs: 1, md: 2 } }}>
-                  <Image src={Replace} alt="Image" width={500} height={500} />
+                  <Image src={Array.isArray(sectionImage) ? sectionImage[0] : sectionImage} alt="Image" width={500} height={500} />
+
                 </Box>
               </Card>
             </Grid>
@@ -262,32 +331,15 @@ const BlogPostDetails: React.FC = () => {
                   />
                   <Divider sx={{ borderColor: '#000' }} />
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="outlined" sx={{ mt: 2 ,borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87'}}>
+                    <Button variant="outlined" sx={{ mt: 2, borderRadius: '20px', height: '46px', width: '165px', border: '1px solid #CBBC87' }}>
                       Edit Section
                     </Button>
                   </Box>
                 </>
               ) : (
                 <>
-                  <Typography variant="h5">Design Process for Beginners</Typography>
-                  <Typography variant="body1">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in Lorem ipsum dolor sit
-                    amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                    reprehenderit in Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit
-                    amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum
+                  <Typography variant="h5">{content.section4Title}</Typography>
+                  <Typography variant="body1">{content.section4Decription}
                   </Typography>
                 </>
               )}

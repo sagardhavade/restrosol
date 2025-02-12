@@ -1,5 +1,6 @@
+"use client"
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import img from '@/public/images/Imagess.svg';
 import imglogo from '@/public/images/Iconn.svg';
@@ -7,7 +8,41 @@ import './style/style.css';
 import Founder from '../aboutus/founder';
 import Meet_talent from './meet_talent';
 import Link from 'next/link';
+import { getJobPosts } from '@/app/api/jobPost/jobpost';
+interface JobPost {
+  id: string;
+  dateCreated: string;
+  jobTitle: string;
+  location: string;
+  department: string;
+  aboutThisJob: string;
+  closingDate: string;
+  requirements: string[];
+}
 const Career = () => {
+
+  const [content, setContent] = useState<JobPost[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getJobPosts(); // Assuming getJobPosts() fetches the data
+        console.log("response", response);
+
+        // Filter out jobs with a closing date greater than the current date
+        const filteredContent = response.filter((job: JobPost) => {
+          const closingDate = new Date(job.closingDate);
+          const currentDate = new Date();
+          return closingDate > currentDate;
+        });
+
+        setContent(filteredContent); // Set the filtered content
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div className="section1400">
@@ -65,153 +100,37 @@ const Career = () => {
             shape the world where your dreams can take flight.
           </div>
           <div className="job_card">
-            <div className="job_section">
-              <div>
-                <div className="relationship_title">Relationship Manager</div>
-                <div className="relationship_category">
-                  <div className="category_location">Location: India</div>
-                  <div className="category_location">Department: Retail Banking</div>
-                </div>
+            {content.map((job) => (
+              <div key={job.id} className="job_section">
                 <div>
-                  <div className="about_job">About This Job</div>
-                  <div className="job_opening_paragraph">
-                    As a Relationship Manager at Restrosol, you will be responsible for developing and maintaining
-                    relationships with our valued customers. You will proactively identify their financial needs and
-                    offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent
-                    communication skills, a strong sales acumen, and a passion for delivering exceptional customer
-                    service.
+                  <div className="relationship_title">{job.jobTitle}</div>
+                  <div className="relationship_category">
+                    <div className="category_location">Location: {job.location}</div>
+                    <div className="category_location">Department: {job.department}</div>
                   </div>
-                </div>
-                <div className="requirements_card">
-                  <div className="about_job">Requirements & Qualifications</div>
-                  <div className="job_opening_paragraph">
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Bachelor's degree in Business, Finance, or a related field
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Minimum of 3 years of experience in sales or relationship management in the banking industry
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Proven track record of meeting and exceeding sales targets
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Excellent interpersonal and negotiation skills
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Strong knowledge of banking products and services
+                  <div>
+                    <div className="about_job">About This Job</div>
+                    <div className="job_opening_paragraph">{job.aboutThisJob}</div>
+                  </div>
+                  <div className="requirements_card">
+                    <div className="about_job">Requirements & Qualifications</div>
+                    <div className="job_opening_paragraph">
+                      {job.requirements.map((requirement, index) => (
+                        <div key={index} className="job_logo">
+                          <Image src={imglogo} alt="Logo" width={20} height={20} />
+                          {requirement}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="apply">
-                <Link className="apply_link" href="#">
-                  Apply Now
-                </Link>
-              </div>
-            </div>
-            <div className="job_section">
-              <div>
-                <div className="relationship_title">Relationship Manager</div>
-                <div className="relationship_category">
-                  <div className="category_location">Location: India</div>
-                  <div className="category_location">Department: Retail Banking</div>
-                </div>
-                <div>
-                  <div className="about_job">About This Job</div>
-                  <div className="job_opening_paragraph">
-                    As a Relationship Manager at Restrosol, you will be responsible for developing and maintaining
-                    relationships with our valued customers. You will proactively identify their financial needs and
-                    offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent
-                    communication skills, a strong sales acumen, and a passion for delivering exceptional customer
-                    service.
-                  </div>
-                </div>
-                <div className="requirements_card">
-                  <div className="about_job">Requirements & Qualifications</div>
-                  <div className="job_opening_paragraph">
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Bachelor's degree in Business, Finance, or a related field
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Minimum of 3 years of experience in sales or relationship management in the banking industry
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Proven track record of meeting and exceeding sales targets
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Excellent interpersonal and negotiation skills
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Strong knowledge of banking products and services
-                    </div>
-                  </div>
+                <div className="apply">
+                  <Link className="apply_link" href="#">
+                    Apply Now
+                  </Link>
                 </div>
               </div>
-              <div className="apply">
-                <Link className="apply_link" href="#">
-                  View All
-                </Link>
-              </div>
-            </div>
-            <div className="job_section">
-              <div>
-                <div className="relationship_title">Relationship Manager</div>
-                <div className="relationship_category">
-                  <div className="category_location">Location: India</div>
-                  <div className="category_location">Department: Retail Banking</div>
-                </div>
-                <div>
-                  <div className="about_job">About This Job</div>
-                  <div className="job_opening_paragraph">
-                    As a Relationship Manager at Restrosol, you will be responsible for developing and maintaining
-                    relationships with our valued customers. You will proactively identify their financial needs and
-                    offer tailored solutions to help them achieve their goals. We are seeking individuals with excellent
-                    communication skills, a strong sales acumen, and a passion for delivering exceptional customer
-                    service.
-                  </div>
-                </div>
-                <div className="requirements_card">
-                  <div className="about_job">Requirements & Qualifications</div>
-                  <div className="job_opening_paragraph">
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Bachelor's degree in Business, Finance, or a related field
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Minimum of 3 years of experience in sales or relationship management in the banking industry
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Proven track record of meeting and exceeding sales targets
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Excellent interpersonal and negotiation skills
-                    </div>
-                    <div className="job_logo">
-                      <Image src={imglogo} alt="Logo" width={20} height={20} />
-                      Strong knowledge of banking products and services
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="apply">
-                <Link className="apply_link" href="#">
-                  Apply Now
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         <div className="quiry_text">

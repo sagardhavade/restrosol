@@ -5,6 +5,7 @@ import DashboardRootLayout from '../components/layout';
 import Sidebar from '@/app/dashboard/layout/sidebar/sidebar';
 import Header from './layout/header/Header';
 import { Props } from 'next/script';
+import ClientAuthCheck from './ClientAuthCheck';
 
 interface ItemType {
   toggleMobileSidebar: () => void;
@@ -42,6 +43,8 @@ const RootLayout = ({ children }: Props, { toggleMobileSidebar }: ItemType) => {
 
   return (
     <>
+      {/* Client-side authentication check */}
+      <ClientAuthCheck />
       <MainWrapper>
         <Sidebar
           isMobileSidebarOpen={isMobileSidebarOpen}

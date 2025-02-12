@@ -30,7 +30,7 @@ const storage = new CloudinaryStorage({
   
 // 🔹 POST route for uploading images
 // router.post("/",upload.fields([ { name: "images", maxCount: 5 }, { name: "clientImage", maxCount: 2 }]), async (req, res) => {
-    router.post("/",upload.fields([ { name: "images", maxCount: 5 }]), async (req, res) => {
+    router.post("/",upload.fields([ { name: "images", maxCount: 10 },{ name: "clientImage", maxCount: 2 },{name:"sectionImage",maxCount:1},{name:"clientSectionImage",maxCount:1}]), async (req, res) => {
       try {
         const { category, brandName, brandDescription, description, points, clientDescription, clientName } = req.body;
         console.log("re log",req.body)
@@ -45,6 +45,17 @@ const storage = new CloudinaryStorage({
         if (req.files["clientImage"]) {
           clientImageUrls = req.files["clientImage"].map((file) => file.path); // Store multiple client images
         }
+        let sectionImageUrls = [];
+        if (req.files["sectionImage"]) {
+            // If new client images are uploaded, update the clientImage array
+            sectionImageUrls = req.files["sectionImage"].map((file) => file.path);
+        }
+        let clientSectionImageUrls = [];
+        if (req.files["clientSectionImage"]) {
+            // If new client images are uploaded, update the clientImage array
+            clientSectionImageUrls = req.files["clientSectionImage"].map((file) => file.path);
+        }
+
   
         // 🔹 Create a new Gallary instance
         const gallary = new Gallary({
@@ -52,13 +63,16 @@ const storage = new CloudinaryStorage({
           brandName:brandName,
           brandDescription:brandDescription,
           description:description,
-          points:points,          
+          //points:points,          
+          points: points ? points.split(",") : [], // Convert CSV to array
           clientDescription,
           clientName: clientName ? clientName.split(",") : [], // Convert CSV to array
           images: imageUrls, // Store multiple product images
-        //   clientImage: clientImageUrls, // Store multiple client images
+          clientImage: clientImageUrls, // Store multiple client images
+          sectionImage:sectionImageUrls,
+          clientSectionImage:clientSectionImageUrls
         });
-  console.log("serwef",gallary);
+    console.log("serwef",gallary);
         await gallary.save();
         res.status(201).json(gallary);
       } catch (error) {
@@ -76,32 +90,81 @@ router.post('/addBrand', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-// PUT route for updating an existing resume
-router.put('/:id', upload.single('image'), async (req, res) => {
+
+// PUT route for updating an existing gallary
+router.put('/:id', upload.fields([ { name: "images", maxCount: 10 }, { name: "clientImage", maxCount: 2 },{name:"sectionImage",maxCount:1},{name:"clientSectionImage",maxCount:1}]), async (req, res) => {
     try {
-        const updateData = req.body;
-        if (req.file) {
-            updateData.resume = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
+        // Get the data from the request body
+        const { category, brandName, brandDescription, description, points, clientDescription, clientName } = req.body;
+
+        // Prepare the fields for update
+        const updateData = {
+            category,
+            brandName,
+            brandDescription,
+            description,
+            points: points ? points.split(",") : [], // Convert CSV to array
+            clientDescription,
+            clientName: clientName ? clientName.split(",") : [] // Convert CSV to array
+        };
+
+        // Handle image updates (for both product and client images)
+        let imageUrls = [];
+        if (req.files["images"]) {
+            // If new images are uploaded, update the images array
+            imageUrls = req.files["images"].map((file) => file.path);
         }
 
+        let clientImageUrls = [];
+        if (req.files["clientImage"]) {
+            // If new client images are uploaded, update the clientImage array
+            clientImageUrls = req.files["clientImage"].map((file) => file.path);
+        }
+        let sectionImageUrls = [];
+        if (req.files["sectionImage"]) {
+            // If new client images are uploaded, update the clientImage array
+            sectionImageUrls = req.files["sectionImage"].map((file) => file.path);
+        }
+        let clientSectionImageUrls = [];
+        if (req.files["clientSectionImage"]) {
+            // If new client images are uploaded, update the clientImage array
+            clientSectionImageUrls = req.files["clientSectionImage"].map((file) => file.path);
+        }
+
+        // Update the images and client images only if new files are uploaded
+        if (imageUrls.length > 0) {
+            updateData.images = imageUrls;
+        }
+
+        if (clientImageUrls.length > 0) {
+            updateData.clientImage = clientImageUrls;
+        }
+        if (clientSectionImageUrls.length > 0) {
+            updateData.clientSectionImage = clientSectionImageUrls;
+        }
+        if (sectionImageUrls.length > 0) {
+            updateData.sectionImage = sectionImageUrls;
+        }
+
+        // Find and update the Gallary by ID
         const updatedGallary = await Gallary.findByIdAndUpdate(
-            req.params.id,
-            updateData,  // Update with the provided body
-            { new: true, runValidators: true } // Return updated document
+            req.params.id,    // Find gallary by ID
+            updateData,       // Update with the new data
+            { new: true, runValidators: true } // Return the updated document
         );
 
         if (!updatedGallary) {
             return res.status(404).json({ message: 'Gallary not found' });
         }
 
+        // Respond with the updated gallery object
         res.status(200).json(updatedGallary);
     } catch (error) {
+        // Handle any errors during the update
         res.status(500).json({ error: error.message });
     }
 });
+
 
 router.get('/', async (req, res) => {
     try {

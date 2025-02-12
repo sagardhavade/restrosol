@@ -1,39 +1,42 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const achievementSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    publisher : {
-        type: String,
-        required: true
-    },
-    Link : {
-        type: String,
-        default: ''
-    },
-    description : {
-        type: String,
-        default: ''
-    },  
+  title: {
+    type: String,
+    required: true,
+  },
+  publisher: {
+    type: String,
+    required: true,
+  },
+  link: {
+    type: String,
+    default: "",
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+  //   image: {
+  //     data: Buffer,
+  //     contentType: String
+
+  //   },
   image: {
-    data: Buffer,
-    contentType: String
-    
-  },    
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    }
-})
-
-achievementSchema.virtual('id').get(function () {
-    return this._id.toHexString();
+    type: String,
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-achievementSchema.set('toJSON', {
-    virtuals:true,
+achievementSchema.virtual("id").get(function () {
+  return this._id.toHexString();
 });
 
-module.exports= mongoose.model('achievement', achievementSchema);
+achievementSchema.set("toJSON", {
+  virtuals: true,
+});
+
+module.exports = mongoose.model("achievement", achievementSchema);

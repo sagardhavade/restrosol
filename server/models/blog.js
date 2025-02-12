@@ -1,33 +1,50 @@
 const mongoose = require("mongoose");
 
 const blogSchema = mongoose.Schema({
+  category: {
+    type: String,    
+  },
   title: {
     type: String,
-    required: true,
+    
   },
-  subtitle: {
+  description: {
+    type: String,
+    
+  },
+  sectionDecription: {
     type: String,
     required: true,
   },
-  categoryBtn: {
-    type: String,
-    required: true,
+  points:[{
+    type:String,
+  }],
+  sectionImage:{
+    type:String,
   },
-  viewMoreBtn: {
-    type: String,
-    required: true,
+  section1Title:{
+    type:String,
   },
-  path: {
-    type: String,
-    required: true,
+  section1Decription:{
+    type:String,
   },
-  categoryId: {
-    type: mongoose.Schema.Types.ObjectId, // Use ObjectId
-    ref: "categories", // Reference the Category model
+  section2Title:{
+    type:String,
   },
-  image: {
-    data: Buffer,
-    contentType: String,
+  section2Decription:{
+    type:String,
+  },
+  section3Title:{
+    type:String,
+  },
+  section3Decription:{
+    type:String,
+  },
+  section4Title:{
+    type:String,
+  },
+  section4Decription:{
+    type:String,
   },
   date: {
     type: Date,

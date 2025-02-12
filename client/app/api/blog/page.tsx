@@ -1,9 +1,9 @@
 import axios from 'axios';
 // Create a new job post
-export const addGallary = async (formData: any) => {
+export const addBlog = async (formData: any) => {
     try {
         console.log("asdasda", formData);
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/gallary`, formData);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/blog`, formData);
         console.log("asdasda", response);
         return response.data;
     } catch (error) {
@@ -12,10 +12,10 @@ export const addGallary = async (formData: any) => {
     }
 };
 // Update an existing gallery
-export const updateGallary = async (id: string, formData: any) => {
+export const updateBlog = async (id: string, formData: any) => {
     try {
         console.log("Updating gallary with ID:", id);
-        const response = await axios.put(`${process.env.NEXT_PUBLIC_API}/gallary/${id}`, formData);
+        const response = await axios.put(`${process.env.NEXT_PUBLIC_API}/blog/${id}`, formData);
         console.log("Updated gallary response:", response);
         return response.data;
     } catch (error) {
@@ -23,9 +23,9 @@ export const updateGallary = async (id: string, formData: any) => {
         throw error;
     }
 };
-export const getGallary = async () => {
+export const getBlog = async () => {
     try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/gallary`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/blog`);
         console.log(response.data);
         return response.data;
     } catch (err) {

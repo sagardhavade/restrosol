@@ -5,20 +5,22 @@ import { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
 interface BlogPostCardProps {
-  img: StaticImageData;
+  id:string;
+  sectionImage: string;
   title: string;
-  subtitle: string;
-  categoryBtn: string;
+  description: string;
+  category: string;
   date: string;
-  viewMoreBtn: string;
-  path: string;
+  // viewMoreBtn: string;
+  // path: string;
 }
 
-const BlogPostCard: React.FC<BlogPostCardProps> = ({ img, title, subtitle, categoryBtn, date, viewMoreBtn,path }) => {
+// const BlogPostCard: React.FC<BlogPostCardProps> = ({ img, title, subtitle, categoryBtn, date, viewMoreBtn,path }) => {
+  const BlogPostCard: React.FC<BlogPostCardProps> = ({ sectionImage, title, description, category, date,id }) => {
   return (
     <Card sx={{ backgroundColor: '#fff', color: '#000', m: '20px' }}>
       <Box sx={{ position: 'relative', height: 200 }}>
-        <Image src={img} alt={title} layout="fill" objectFit="cover" />
+        <Image src={Array.isArray(sectionImage) ? sectionImage[0] : sectionImage} alt={title} layout="fill" objectFit="cover" />
       </Box>
       <CardContent>
         <Typography variant="h5" component="div" textAlign={'center'}>
@@ -26,18 +28,19 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ img, title, subtitle, categ
         </Typography>
 
         <Typography variant="body2" textAlign={'center'}>
-          {subtitle}
+          {description}
         </Typography>
       </CardContent>
       <Divider sx={{ borderColor: '#000' }} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', m: 1 }}>
-        <Typography sx={{ mb: 1.5 }}>{categoryBtn}</Typography>
+        <Typography sx={{ mb: 1.5 }}>{category}</Typography>
         <Typography variant="body2">{date}</Typography>
       </Box>
       <Divider sx={{ borderColor: '#000' }} />
       <CardActions>
-      <Link href={path} passHref>
-          <Button style={{textDecoration: 'none'}} size="small">{viewMoreBtn}</Button>
+      {/* <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref> */}
+      <Link href={{ pathname: '/dashboard/utilities/blog/blogpost/', query: { id:id } }} passHref>
+          <Button style={{textDecoration: 'none'}} size="small">View More</Button>
         </Link>
       </CardActions>
     </Card>

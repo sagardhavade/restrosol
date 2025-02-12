@@ -107,7 +107,7 @@ const Page: React.FC = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  displayedRows.map((contact: Contact) => (
+                  displayedRows.map(( contact: Contact) => (
                     <React.Fragment key={contact.id}>
                       <TableRow
                         onClick={() => handleRowClick(contact.id)}

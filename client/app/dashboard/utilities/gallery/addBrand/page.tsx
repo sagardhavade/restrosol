@@ -8,8 +8,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { addGallary } from '@/app/api/gallary/page';
-
+import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/page';
+import { useSearchParams } from 'next/navigation'
 interface Client {
   name: string;
   image: string;
@@ -17,8 +17,9 @@ interface Client {
 interface client {
   clientName: string[];
   // clientImage: string;
-  // clientImage: string[] | null; // Allow clientImage to be null
+  clientImage: string[] | null; // Allow clientImage to be null
   clientDescription: string;
+  clientSectionImage: string[];
 }
 interface brandSection {
   category: string;
@@ -29,6 +30,7 @@ interface brandSection {
 interface section {
   description: string;
   points: string[];
+  sectionImage: string[];
 }
 // interface ClientSection {
 //   clientImages: string[];
@@ -39,6 +41,9 @@ const AddBrand: React.FC = () => {
   const [brandSectionData, setBrandSectionData] = useState<brandSection | null>(null); // Can be null or a single object
   const [clientSectionData, setClientSectionData] = useState<client | null>(null);
 
+  const [clientSectionImage, setClientSectionImage] = useState<string[]>([]);
+  const [clientSectionImageFile, setClientSectionImageFile] = useState<File[]>([]);
+
   const [gallery, setGallery] = useState<string>('');
   const [points, setPoints] = useState<string[]>(['']);
   const [clients, setClients] = useState<Client[]>([]);
@@ -47,21 +52,29 @@ const AddBrand: React.FC = () => {
   const [brandDescription, setBrandDescription] = useState('');
   const [description, setDescription] = useState('');
 
+  const [sectionImageFile, setSectionImageFile] = useState<File[]>([]);
+  const [sectionImage, setSectionImage] = useState<string[]>([]);
+
   const [clientName, setClientName] = useState<string[]>(['']);
   const [clientDescription, setClientDescription] = useState('');
-  // const [clientImages, setClientImages] = useState<string[]>(['']); // Initial empty string for client images (URL or placeholder)
 
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [clientFileList, setClientFileList] = useState<File[]>([]); // Initialize as an empty array for file storage
+  const [clientImage, setClientImage] = useState<string[]>([]);
+
+  // This function will be triggered when the file field changes
+  // This function will be triggered when the "Remove This Image" button is clicked
+  // const removeSelectedImage = () => {
+  //   setSelectedImage(null);
+  //   setClientImage([]);
+  // };
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]); // State to store file names
-  // Handle image upload
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-  //   const file = e.target.files?.[0]; // Get the first file selected
-  //   if (file) {
-  //     const newClientImages = [...clientImages]; // Copy the clientImages array
-  //     newClientImages[index] = URL.createObjectURL(file); // Set the new image for the specific client
-  //     setClientImages(newClientImages); // Update the state with the new image
-  //   }
-  // };
+
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
+  console.log('Product ID:', id);  // Lo
+  const [isEditing, setIsEditing] = useState(false);
 
   // Load Section Data from LocalStorage on Page Load
   useEffect(() => {
@@ -74,16 +87,51 @@ const AddBrand: React.FC = () => {
     }
     if (brandSection) {
       setBrandSectionData(JSON.parse(brandSection));
-      // if (brandSectionData?.brandName) {
-      //   setBrandName(brandSectionData.brandName);
-      // }
       console.log("brandsectionData", brandSectionData);
     }
     if (clientSectionData) {
       setClientSectionData(JSON.parse(clientSectionData));
       console.log("clientSectionData", clientSectionData);
     }
+
+
   }, []);
+  // if (id) {
+
+    
+    // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
+    useEffect(() => {
+      const fetchGallary = async () => {
+        try {
+          const fetchData = await getGallary(); // Replace with your actual fetch function
+          console.log(fetchData);
+  
+          if (id) {
+            const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
+            console.log("didsf", matchedItem);
+            if (matchedItem) {
+              setGallery(matchedItem.category || '')
+              setBrandDescription(matchedItem.brandDescription || '');
+              setBrandName(matchedItem.brandName || '');
+              setDescription(matchedItem.description || '');
+              setClientDescription(matchedItem.clientDescription || '');
+              setPoints(matchedItem.points || []);
+              //setFileImages(matchedItem.images || []);
+              setClientName(matchedItem.clientName || []);
+              setClientImage(matchedItem.clientImage || []);
+              setFileNames(matchedItem.images);
+              setClientSectionImage(matchedItem.clientSectionImage);
+              setSectionImage(matchedItem.sectionImage);
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchGallary(); // Call the fetch function once on mount
+    }, []); // Empty array ensures it runs only once when the component mounts
+  //}
+
   useEffect(() => {
     if (brandSectionData?.brandDescription) {
       setBrandDescription(brandSectionData.brandDescription)
@@ -103,9 +151,13 @@ const AddBrand: React.FC = () => {
     if (sectionData?.points) {
       setPoints(sectionData.points);
     }
+    if (sectionData?.sectionImage) {
+      setSectionImage(sectionData.sectionImage);
+    }
 
 
   }, [sectionData]);
+
   useEffect(() => {
     if (clientSectionData?.clientDescription) {
       setClientDescription(clientSectionData.clientDescription)
@@ -113,12 +165,12 @@ const AddBrand: React.FC = () => {
     if (clientSectionData?.clientName) {
       setClientName(clientSectionData.clientName);
     }
-    if (clientSectionData?.clientDescription) {
-      setClientDescription(clientSectionData.clientDescription);
+    if (clientSectionData?.clientImage) {
+      setClientImage(clientSectionData.clientImage);
     }
-    // if (clientSectionData?.clientImage) {
-    //   setClientImages(clientSectionData.clientImage);
-    // }
+    if (clientSectionData?.clientSectionImage) {
+      setClientSectionImage(clientSectionData.clientSectionImage);
+    }
   }, [clientSectionData]);
 
   // Save Section to LocalStorage
@@ -128,6 +180,7 @@ const AddBrand: React.FC = () => {
 
       description,
       points,
+      sectionImage
 
     };
     // Ensure prevState is always an array
@@ -154,9 +207,11 @@ const AddBrand: React.FC = () => {
     const clientSection: client = {
       clientName,
       clientDescription,
+      clientImage,
+      clientSectionImage
       // clientImage: clientImages, // Store the image URL or null
     };
-
+    console.log(clientSection, "dddddd");
     setClientSectionData(clientSection);
     localStorage.setItem("clientSectionData", JSON.stringify(clientSection));
     alert("Client Section Data Saved !");
@@ -189,8 +244,10 @@ const AddBrand: React.FC = () => {
     formData.append("description", section.description);
     formData.append("points", section.points);
     formData.append("clientName", clientSection.clientName);
+    // formData.append("clientImage", clientSection.clientImage);
     formData.append("clientDescription", clientSection.clientDescription);
-
+    // formData.append("clientSectionImage", clientSection.clientSectionImageFile); // Append each image/video to "images" field
+    // formData.append("sectionImage", section.sectionImageFile); // Append each image/video to "images" field
 
     // Append files to form data
     if (selectedFiles.length > 0) {
@@ -202,34 +259,69 @@ const AddBrand: React.FC = () => {
       formData.append("images", JSON.stringify([])); // Append an empty array if no images
     }
 
+    // Append files to form data
+    if (clientFileList.length > 0) {
+      clientFileList.forEach(file => {
+        formData.append("clientImage", file); // Append each image/video to "images" field
+      });
+    } else {
+      // If no images, you can choose to append null or empty array
+      formData.append("clientImage", JSON.stringify([])); // Append an empty array if no images
+    }
+
+
+    // Append files to form data
+    if (clientSectionImageFile.length > 0) {
+      clientSectionImageFile.forEach(file => {
+        formData.append("clientSectionImage", file); // Append each image/video to "images" field
+      });
+    } else {
+      // If no images, you can choose to append null or empty array
+      formData.append("clientSectionImage", JSON.stringify([])); // Append an empty array if no images
+    }
+    // Append files to form data
+    if (sectionImageFile.length > 0) {
+      sectionImageFile.forEach(file => {
+        formData.append("sectionImage", file); // Append each image/video to "images" field
+      });
+    } else {
+      // If no images, you can choose to append null or empty array
+      formData.append("sectionImage", JSON.stringify([])); // Append an empty array if no images
+    }
+
     // Log FormData contents for debugging
     formData.forEach((value, key) => {
       console.log(key + ": " + value); // Log all FormData entries for debugging
     });
-    // Handle client images (multiple)
-    // if (clientSection?.clientImage && clientSection.clientImage.length > 0) {
-    //   clientSection.clientImage.forEach((clientImage: string) => {
-    //     formData.append("clientImage", clientImage); // Append each client image
-    //   });
-    // }
-    // else {
-    //   formData.append("clientImage", ""); // If no client images, append an empty string
-    // }
-
     // Log the FormData contents
     formData.forEach((value, key) => {
       console.log(key + ": " + value); // This logs all the FormData entries
     });
     try {
-      // Call the API with the formData
-      const result = await addGallary(formData);
-      alert('Gallery uploaded successfully!');
+      if (id) {
+        const result = await updateGallary(id, formData);
+        alert('Gallery Updated successfully!');
 
-      // Optionally clear selected files or localStorage here
-      setSelectedFiles([]);  // Clear selected files
-      localStorage.removeItem("sectionData");
-      localStorage.removeItem("brandSectionData");
-      localStorage.removeItem("clientSectionData");
+        // Optionally clear selected files or localStorage here
+        setSelectedFiles([]);  // Clear selected files
+        localStorage.removeItem("sectionData");
+        localStorage.removeItem("brandSectionData");
+        localStorage.removeItem("clientSectionData");
+        window.location.reload();
+      }
+      else {
+        // Call the API with the formData
+        const result = await addGallary(formData);
+        alert('Gallery insert successfully!');
+
+        // Optionally clear selected files or localStorage here
+        setSelectedFiles([]);  // Clear selected files
+        localStorage.removeItem("sectionData");
+        localStorage.removeItem("brandSectionData");
+        localStorage.removeItem("clientSectionData");
+        window.location.reload();
+      }
+
     } catch (error) {
       console.error("Error uploading gallery:", error);
       alert("Failed to upload gallery.");
@@ -257,30 +349,81 @@ const AddBrand: React.FC = () => {
     const newPoints = points.filter((_, i) => i !== index);
     setPoints(newPoints);
   };
-  // const handleClientChange = (index: number, value: string) => {
-  //   const newClient = [...clientName];
-  //   newClient[index] = value;
-  //   setclientName(newClient);
-  // };
 
   const handleClientChange = (index: number, value: string) => {
     const newClientNames = [...clientName];
     newClientNames[index] = value;
     setClientName(newClientNames);
   };
-  const addClients = () => {
-    setClientName([...clientName, '']); // Add an empty client name
-    // setClientImages([...clientImages, '/placeholder.png']); // Add a placeholder image
+  const imageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const imageFile = e.target.files[0];
+      // Create a FileReader to convert file to a data URL
+
+      // If you want to store the File object instead of the Data URL
+      const updatedFileList = [...clientFileList];
+      updatedFileList[index] = imageFile; // Store the file at the specific index
+      setClientFileList(updatedFileList); // Update the file list in the state
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Update the specific client's image
+        const updatedImages = [...clientImage];
+        updatedImages[index] = reader.result as string;
+        setClientImage(updatedImages); // Set the updated image array
+      };
+      reader.readAsDataURL(imageFile); // Read the file as a data URL
+    }
   };
 
-  // Add client button handler
-  // const addClients = () => {
-  //   if (clientName.length < 2) {
-  //     setclientName([...clientName, '']); // Add an empty client name for the next input
-  //   } else {
-  //     alert('Maximum 2 clients allowed!');
+  const handleImageChange = (index: number, value: string) => {
+    const newClientImage = [...clientImage];
+    newClientImage[index] = value;
+    setClientImage(newClientImage);
+  };
+
+  // const handleSectionImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0]; // Get the selected file
+  //   if (file) {
+  //     setSectionImageFile(file); // Store the File object
+  //     setSectionImage(URL.createObjectURL(file)); // Generate a preview URL
   //   }
+
   // };
+
+  const handleSectionImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // Generate a valid URL
+      setSectionImageFile([file]); // Store the file in an array
+      setSectionImage([imageUrl]); // Store the preview in an array
+    }
+  };
+
+  const handleClientImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // Generate a valid URL
+      console.log("sss", imageUrl);
+      setClientSectionImageFile([file]); // Store the file in an array
+      setClientSectionImage([imageUrl]); // Store the preview in an array
+    }
+  };
+
+
+  // const addClients = () => {
+  //   setClientName([...clientName, '']); // Add an empty client name
+  //   // setClientImages([...clientImages, '/placeholder.png']); // Add a placeholder image
+  // };
+  const addClients = () => {
+    // Only add a new client if there are fewer than 2 clients
+    console.log(clientImage);
+    if (clientName.length < 2) {
+      setClientName([...clientName, '']); // Add an empty client name
+      setClientImage([...clientImage, '/placeholder.png']); // Add a placeholder image
+    }
+  };
+
   const addClient = () => {
     setClients([...clients, { name: '', image: Replace.src }]);
   };
@@ -291,20 +434,6 @@ const AddBrand: React.FC = () => {
     setClients(newClients);
   };
 
-  // const handleImageUpload = () => {
-  //   if (fileInputRef.current) {
-  //     fileInputRef.current.click();
-  //   }
-  // };
-
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files && files.length > 0) {
-  //     // Handle the uploaded files
-  //     console.log(files);
-  //   }
-  // };
-
   const handleImageUpload = () => {
     fileInputRef.current?.click();
   };
@@ -314,7 +443,7 @@ const AddBrand: React.FC = () => {
     if (!files) return;
 
     const fileArray = Array.from(files);
-
+    console.log(fileArray);
     // Limit file selection to a max of 10
     if (selectedFiles.length + fileArray.length > 10) {
       alert("You can only upload a maximum of 10 images/videos.");
@@ -334,20 +463,6 @@ const AddBrand: React.FC = () => {
       <RootLayout>
         <Grid container justifyContent="center">
           <Box>
-            {/* <Button
-              variant="contained"
-              onClick={handleAddBrand}
-              style={{
-                width: '165px',
-                height: '46px',
-                top: '33px',
-                left: '999px',
-                gap: '0px',
-                backgroundColor: '#D4AF37',
-              }}
-            >
-              Save Gallery
-            </Button> */}
             <Box
               mt={5}
               p={3}
@@ -554,14 +669,37 @@ const AddBrand: React.FC = () => {
                     Add Point
                   </Button>
                 </Box>
-                <Image
+                {/* <Image
                   src={Replace}
                   alt="Replace"
                   width={466}
                   height={366}
                   objectFit="cover"
                   style={{ borderRadius: '8px' }}
-                />
+                /> */}
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                  {/* Ensure a valid image preview URL exists */}
+                  {sectionImage.length > 0 && sectionImage[0] ? (
+                    <Image
+                      src={sectionImage[0]} // This will always be a valid blob URL
+                      alt="Selected Preview"
+                      width={466}
+                      height={366}
+                      style={{ borderRadius: "8px", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <p>No image selected</p>
+                  )}
+
+                  {/* File Input */}
+                  <input type="file" accept="image/*" onChange={handleSectionImageChange} />
+
+                  {/* Show File Details */}
+                  {sectionImageFile.length > 0 && <p>Selected File: {sectionImageFile[0].name}</p>}
+                </div>
+
+
               </Box>
               <Typography variant="caption" display="block" sx={{ mt: 1, textAlign: 'center' }}>
                 *Add Maximum 10 Images/Videos*
@@ -625,7 +763,7 @@ const AddBrand: React.FC = () => {
                 *Add Maximum 10 Images/Videos*
               </Typography>
               {/* Display file names */}
-              {fileNames.length > 0 && (
+              {/* {fileNames.length > 0 && (
                 <div style={{ marginTop: '10px' }}>
                   <Typography variant="body2">Selected Files:</Typography>
                   <ul>
@@ -634,7 +772,31 @@ const AddBrand: React.FC = () => {
                     ))}
                   </ul>
                 </div>
+              )} */}
+              {fileNames.length > 0 && (
+                <div style={{ marginTop: '10px' }}>
+                  <Typography variant="body2">Selected Files:</Typography>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    {fileNames.map((fileName, index) => (
+                      <Button
+                        key={index}
+                        variant="contained"
+                        style={{
+                          textTransform: 'none',
+                          borderRadius: '20px',
+                          padding: '5px 15px',
+                          fontSize: '14px',
+                        }}
+                        onClick={() => window.open(`${fileName}`, '_blank')}
+                      >
+                        {fileName}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               )}
+
+
             </Box>
             <Box
               mt={5}
@@ -648,7 +810,7 @@ const AddBrand: React.FC = () => {
                 borderRadius: '6px',
                 backgroundColor: '#FFFFFF',
                 textAlign: 'center',
-                height: '639px',
+                height: '740px',
                 display: 'flex',
                 flexDirection: 'column',
               }}
@@ -660,7 +822,32 @@ const AddBrand: React.FC = () => {
                 }}
               >
                 <Box>
-                  <Image src={Replace} alt="Replace" width={387} height={433} objectFit="cover" />
+
+
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                    {/* Ensure a valid image preview URL exists */}
+
+                    {clientSectionImage.length > 0 && clientSectionImage[0] ? (
+                      <Image
+                        src={clientSectionImage[0]} // This will always be a valid blob URL
+                        alt="Selected Preview"
+                        width={466}
+                        height={366}
+                        style={{ borderRadius: "8px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <p>No image selected</p>
+                    )}
+
+                    {/* File Input */}
+                    <input type="file" accept="image/*" onChange={handleClientImageChange} />
+
+                    {/* Show File Details */}
+                    {clientSectionImageFile.length > 0 && <p>Selected File: {clientSectionImageFile[0].name}</p>}
+                  </div>
+
+
+
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -692,36 +879,54 @@ const AddBrand: React.FC = () => {
                   />
                   {clientName.map((client, index) => (
                     <Box key={index} sx={{ display: 'flex', gap: '50px', mt: 5 }}>
-                      {/* <Image
-                        src={clientImage}
-                        alt="Client Image"
-                        width={76}
-                        height={76}
-                        objectFit="cover"
-                        style={{ borderRadius: '50px' }}
-                      /> */}
 
-                      {/* Image upload input */}
-                      {/* <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(e, index)} // Call image handler
-                        style={{ display: 'none' }}
-                        id={`upload-image-${index}`} // Unique ID for each client
-                      />
-                      <label htmlFor={`upload-image-${index}`} style={{ cursor: 'pointer' }}>
-                        
-                        <Image
-                          src={clientImages[index] && clientImages[index].startsWith("http")
-                            ? clientImages[index]
-                            : "/placeholder.png"}
-                          alt={`Client Image ${index + 1}`}
-                          width={76}
-                          height={76}
-                          objectFit="cover"
-                          style={{ borderRadius: "50px" }}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          paddingTop: 5,
+                        }}
+                      >
+                        {/* File input hidden */}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => imageChange(e, index)} // Pass index to handle image change for each client
+                          style={{ display: "none" }}
+                          id={`upload-image-${index}`} // Use unique ID for each client
                         />
-                      </label> */}
+                        <label htmlFor={`upload-image-${index}`}>
+                          <Button variant="contained" component="span">
+                            Select Image
+                          </Button>
+                        </label>
+
+                        {clientImage[index] && (
+                          <Box
+                            sx={{
+                              marginTop: 2,
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
+                          >
+                            {/* Image preview */}
+                            <Image
+                              src={clientImage[index]} // Use the image for the specific client
+                              alt="Client Image"
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                objectFit: "cover",
+                                borderRadius: "50%",
+                                marginBottom: 2,
+                              }}
+                            />
+                          </Box>
+                        )}
+                      </Box>
                       <TextField
                         placeholder="Client Name"
                         value={client}
@@ -795,7 +1000,8 @@ const AddBrand: React.FC = () => {
               borderRadius: '50px',
             }}
           >
-            Save Gallary
+
+            {id ? 'Update Gallery' : 'Save Gallery'} {/* Conditionally render text */}
           </Button>
         </Grid>
       </RootLayout>

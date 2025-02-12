@@ -8,22 +8,32 @@ import Image from 'next/image';
 import Replace from '@/public/images/Replace.png'; // Adjust the import path as needed
 import { Trykker } from 'next/font/google';
 import { getGallary } from '@/app/api/gallary/page';
-
+import { ArrowBack } from '@mui/icons-material';
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link';
 const DetailsPage: React.FC = () => {
-  const [editMode, setEditMode] = useState(false);
-  const [content, setContent] = useState({
-    brand: 'XYZ Brand',
-    subtitle:
-      'The Restrosol ecosystem is designed to help you generate profit. Set up complete sales and marketing funnels with ease using the Experts',
-    solutionsTitle: 'Highly effective solutions',
-    solutionsDescription:
-      'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.',
-    TestinomialTittle: 'Client Testimonials',
-    Testimonialdesc:
-      '“A testimonial from a client who benefited from your product or service. Testimonials can be a highly effective way of establishing credibility and increasing your companys reputation. highly effective way of establishing credibility and increasing your companys reputatio highly effective way of establishing credibility and increasing your companys reputatio”',
-    clientName: 'Client Name',
-  });
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
+  console.log('Product ID:', id);  // Log the ID to verify
 
+  const [editMode, setEditMode] = useState(false);
+
+  const [content, setContent] = useState({
+    category: '',
+    brand: '',
+    subtitle: '',
+    solutionsTitle: '',
+    solutionsDescription: '',
+    TestinomialTittle: '',
+    Testimonialdesc: ''
+
+  });
+  const [points, setPoints] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+  const [clientName, setClientName] = useState<string[]>([]);
+  const [clientImage, setClientImage] = useState<string[]>([]);
+  const [clientSectionImage, setClientSectionImage] = useState<string[]>([]);
+  const [sectionImage, setSectionImage] = useState<string[]>([]);
   const handleEditClick = () => {
     setEditMode((prev) => !prev);
   };
@@ -31,17 +41,49 @@ const DetailsPage: React.FC = () => {
     setContent({ ...content, [field]: event.target.value });
   };
 
-  useEffect(() => {
-    const fetchGallary = async () => {
-      try {
-        const fetchData = await getGallary();
-        console.log(fetchData);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchGallary();
-  })
+
+  const handleGoBack = () => {
+    window.history.back(); // This will go back to the previous page
+  };
+
+    // Function to fetch gallery data
+ 
+    // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
+    useEffect(() => {
+
+      const fetchGallary = async () => {
+        try {
+          const fetchData = await getGallary(); // Replace with your actual fetch function
+          console.log(fetchData);
+    
+          if (id) {
+            const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
+            console.log("didsf",matchedItem);
+            if (matchedItem) {
+              setContent({
+                category: matchedItem.category || '',
+                brand: matchedItem.brandName || '',
+                subtitle: matchedItem.brandDescription || '',
+                solutionsTitle: 'Highly effective solutions',
+                solutionsDescription: matchedItem.solutionsDescription || '',
+                TestinomialTittle: 'Client Testimonials',
+                Testimonialdesc: matchedItem.clientDescription || '',
+              });
+              setPoints(matchedItem.points || []);
+              setImages(matchedItem.images || []);
+              setClientName(matchedItem.clientName || []);
+              setClientImage(matchedItem.clientImage || []);
+              setSectionImage(matchedItem.sectionImage || []);
+              setClientSectionImage(matchedItem.clientSectionImage || []);
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchGallary(); // Call the fetch function once on mount
+    }, []); // Empty array ensures it runs only once when the component mounts
+  
   return (
     <RootLayout>
       <Box sx={{ p: 0, backgroundColor: '#F5F6FA' }}>
@@ -55,22 +97,32 @@ const DetailsPage: React.FC = () => {
           }}
         >
           <Button
-            variant="text"
+            variant="outlined"
             sx={{
               fontSize: '18px',
               fontWeight: '700',
+              color: 'blue'
             }}
-          >{`< Go Back`}</Button>
-          <Button
+            onClick={handleGoBack}
+          >
+            <ArrowBack />
+            {` Go Back`}</Button>
+          {/* <Button
             variant="contained"
-            onClick={handleEditClick}
+            onClick={handleEditClick} 
             sx={{ width: '165px', height: '46px', borderRadius: '50px' }}
           >
             {editMode ? 'Save' : 'Edit Gallery'}
-          </Button>
+          </Button> */}
+           <Link href={{ pathname: '/dashboard/utilities/gallery/addBrand', query: { id:id } }} passHref>
+                  <Button size="small" component="a">
+                    Edit Gallery
+                    {/* <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} /> */}
+                  </Button>
+                </Link>
         </Box>
         <Box sx={{ textAlign: 'center', width: '663px', height: editMode ? '300px' : '171px', ml: '253px' }}>
-          <Button color="error">Domestic</Button>
+          <Button color="error">{content.category}</Button>
           {editMode ? (
             <TextField
               variant="outlined"
@@ -153,30 +205,30 @@ const DetailsPage: React.FC = () => {
                   {content.solutionsDescription}
                 </Typography>
               )}
+            
               <List sx={{ flexDirection: 'column', fontWeight: '700' }}>
-                <ListItem sx={{ mt: -2 }}>
-                  <CheckCircleIcon sx={{ color: '#6D758F', height: '16px', fontSize: '16px', mr: 1 }} />
-                  We design websites that look amazing.
-                </ListItem>
-                <ListItem sx={{ mt: -5 }}>
-                  <CheckCircleIcon sx={{ color: '#6D758F', height: '16px', fontSize: '16px', mr: 1 }} />
-                  We design websites that look amazing.
-                </ListItem>
-                <ListItem sx={{ mt: -5 }}>
-                  <CheckCircleIcon sx={{ color: '#6D758F', height: '16px', fontSize: '16px', mr: 1 }} />
-                  We design websites that look amazing.
-                </ListItem>
+                {points
+                  .join(',')  // Join the array into a single string
+                  .split(',') // Split by comma into individual items
+                  .map((point, index) => (
+                    <ListItem key={index} sx={{ mt: -2 }}>
+                      <CheckCircleIcon sx={{ color: '#6D758F', height: '16px', fontSize: '16px', mr: 1 }} />
+                      {point.trim()} {/* Trim to remove any extra spaces */}
+                    </ListItem>
+                  ))}
               </List>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
               <Image
-                src={Replace}
+                src={sectionImage[0]}
                 alt="Replace"
                 width={466}
                 height={366}
                 style={{ objectFit: 'contain', borderRadius: '8px' }}
               />
             </Box>
+
+
           </Box>
           {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
           {editMode && (
@@ -189,198 +241,31 @@ const DetailsPage: React.FC = () => {
           )}
         </Box>
 
-        <Box
-          sx={{
-            width: '1135px',
-            height: '1887px',
-            padding: '80px 0px 0px 0px',
-            gap: '54px',
-            p: 2,
-            // background: '#000',
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+
+        <Grid container spacing={2}>
+          {images.map((imageSrc, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
                 <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
+                  src={imageSrc}
+                  alt={`Image ${index + 1}`}
                   layout="fill"
                   objectFit="cover"
                 />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ width: '100%', height: '0', paddingBottom: '75%', position: 'relative' }}>
-                <Image
-                  src={Replace} // Replace with the path to your placeholder image
-                  alt="Placeholder"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </Grid>
-          </Grid>
-          {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
-          {editMode && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-              <Button
-                variant="outlined"
-                sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
-              >Edit Section</Button>
-            </Box>
-          )}
-        </Box>
+          ))}
+        </Grid>
+        {editMode && <Divider sx={{ borderColor: 'rgba(203, 188, 135, 1)' }} />}
+        {editMode && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+            <Button
+              variant="outlined"
+              sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}
+            >Edit Section</Button>
+          </Box>
+        )}
+        {/* </Box> */}
 
         <Card
           sx={{
@@ -394,7 +279,7 @@ const DetailsPage: React.FC = () => {
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '50px' }}>
             <Image
-              src={Replace}
+              src={clientSectionImage[0]}
               alt="Replace"
               width={387}
               height={342}
@@ -429,30 +314,38 @@ const DetailsPage: React.FC = () => {
                   {content.Testimonialdesc}
                 </Typography>
               )}
-              <Box sx={{ display: 'flex', gap: '20px', mt: 2, width: '202px', height: '77px' }}>
-                <Image
-                  src={Replace}
-                  alt="Replace"
-                  width={77}
-                  height={77}
-                  style={{ objectFit: 'cover', borderRadius: '50%' }}
-                />
-                {editMode ? (
-                  <TextField
-                    variant="outlined"
-                    value={content.clientName}
-                    onChange={handleChange('brand')}
-                    fullWidth
-                    sx={{ mb: 2 }}
-                  />
-                ) : (
-                  <Typography variant="h5" mt={3} color={'#1C2448'} gutterBottom>
-                    {content.clientName}
-                  </Typography>
-                )}
+              <Typography variant="body2" fontSize={16} fontWeight={400} fontFamily={'Mulish'} sx={{ mt: 1 }}>
+                  “A testimonial from a client who benefited from your product or service. Testimonials can be a highly
+                  effective way of establishing credibility and increasing your companys reputation.”
+                </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px', mt: 2 }}>
+              {clientImage.length === clientName.length && clientImage.map((imageSrc, index) => (
+                  <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }} key={index}>
+                    <Image
+                      src={imageSrc}
+                      alt={`Image ${index + 1}`}
+                      width={77}
+                      height={77}
+                      style={{ objectFit: 'cover', borderRadius: '50%' }}
+                    />
+                    {editMode ? (
+                      <TextField
+                        variant="outlined"
+                        value={clientName}
+                        onChange={handleChange('clientName')}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                      />
+                    ) : (
+                      <Typography variant="h5" color={'#1C2448'} gutterBottom>
+                        {clientName[index].trim()} {/* Displaying client name */}
+                      </Typography>
+                    )}
+                  </Box>
+                ))}
               </Box>
               <Box sx={{ width: '558px', height: '170px', gap: '20px', opacity: '0px' }}>
-                {editMode ? (
+                {/* {editMode ? (
                   <TextField
                     variant="outlined"
                     value={content.Testimonialdesc}
@@ -466,34 +359,13 @@ const DetailsPage: React.FC = () => {
                   <Typography variant="body2" fontSize={16} fontWeight={400} fontFamily={'Mulish'} sx={{ mt: 1 }}>
                     {content.Testimonialdesc}
                   </Typography>
-                )}
+                )} */}
                 {/* <Typography variant="body2" fontSize={16} fontWeight={400} fontFamily={'Mulish'} sx={{ mt: 1 }}>
                   “A testimonial from a client who benefited from your product or service. Testimonials can be a highly
                   effective way of establishing credibility and increasing your companys reputation.”
                 </Typography> */}
 
-                <Box sx={{ display: 'flex', gap: '20px', mt: 2, width: '202px', height: '77px' }}>
-                  <Image
-                    src={Replace}
-                    alt="Replace"
-                    width={77}
-                    height={77}
-                    style={{ objectFit: 'cover', borderRadius: '50%' }}
-                  />
-                  {editMode ? (
-                    <TextField
-                      variant="outlined"
-                      value={content.clientName}
-                      onChange={handleChange('brand')}
-                      fullWidth
-                      sx={{ mb: 2 }}
-                    />
-                  ) : (
-                    <Typography variant="h5" mt={3} color={'#1C2448'} gutterBottom>
-                      {content.clientName}
-                    </Typography>
-                  )}
-                </Box>
+               
               </Box>
             </Box>
           </Box>

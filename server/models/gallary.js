@@ -41,6 +41,12 @@ const gallarySchema = mongoose.Schema({
   clientImage: [ {
     type: String
   }],
+  sectionImage:[{
+    type:String
+  }],
+  clientSectionImage:[{
+    type:String
+  }],
   dateCreated: {
     type: Date,
     default: Date.now
