@@ -9,7 +9,8 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/pageApi';
-// import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 interface Client {
   name: string;
   image: string;
@@ -74,6 +75,13 @@ const AddBrand: React.FC = () => {
   // const searchParams = useSearchParams()
   // const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
   // console.log('Product ID:', id);  // Lo
+  const params = useParams(); // This gets params from the URL (e.g., /addBrand/123)
+
+  const idString = params.id; // Access the dynamic id from URL
+  // Ensure `id` is a string, even if it's an array or undefined
+  const id = Array.isArray(idString) ? idString[0] : idString ?? ''; // Fallback to empty string if id is undefined
+
+  console.log('Product ID:', id);  // Lo
   const [isEditing, setIsEditing] = useState(false);
 
   // Load Section Data from LocalStorage on Page Load
@@ -100,36 +108,36 @@ const AddBrand: React.FC = () => {
 
     
     // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
-    // useEffect(() => {
-    //   const fetchGallary = async () => {
-    //     try {
-    //       const fetchData = await getGallary(); // Replace with your actual fetch function
-    //       console.log(fetchData);
+    useEffect(() => {
+      const fetchGallary = async () => {
+        try {
+          const fetchData = await getGallary(); // Replace with your actual fetch function
+          console.log(fetchData);
   
-    //       if (id) {
-    //         const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
-    //         console.log("didsf", matchedItem);
-    //         if (matchedItem) {
-    //           setGallery(matchedItem.category || '')
-    //           setBrandDescription(matchedItem.brandDescription || '');
-    //           setBrandName(matchedItem.brandName || '');
-    //           setDescription(matchedItem.description || '');
-    //           setClientDescription(matchedItem.clientDescription || '');
-    //           setPoints(matchedItem.points || []);
-    //           //setFileImages(matchedItem.images || []);
-    //           setClientName(matchedItem.clientName || []);
-    //           setClientImage(matchedItem.clientImage || []);
-    //           setFileNames(matchedItem.images);
-    //           setClientSectionImage(matchedItem.clientSectionImage);
-    //           setSectionImage(matchedItem.sectionImage);
-    //         }
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   };
-    //   fetchGallary(); // Call the fetch function once on mount
-    // }, []);
+          if (id) {
+            const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
+            console.log("didsf", matchedItem);
+            if (matchedItem) {
+              setGallery(matchedItem.category || '')
+              setBrandDescription(matchedItem.brandDescription || '');
+              setBrandName(matchedItem.brandName || '');
+              setDescription(matchedItem.description || '');
+              setClientDescription(matchedItem.clientDescription || '');
+              setPoints(matchedItem.points || []);
+              //setFileImages(matchedItem.images || []);
+              setClientName(matchedItem.clientName || []);
+              setClientImage(matchedItem.clientImage || []);
+              setFileNames(matchedItem.images);
+              setClientSectionImage(matchedItem.clientSectionImage);
+              setSectionImage(matchedItem.sectionImage);
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchGallary(); // Call the fetch function once on mount
+    }, []); // Empty array ensures it runs only once when the component mounts
   //}
 
   useEffect(() => {
@@ -298,18 +306,18 @@ const AddBrand: React.FC = () => {
       console.log(key + ": " + value); // This logs all the FormData entries
     });
     try {
-      // if (id) {
-      //   const result = await updateGallary(id, formData);
-      //   alert('Gallery Updated successfully!');
+      if (id) {
+        const result = await updateGallary(id, formData);
+        alert('Gallery Updated successfully!');
 
-      //   // Optionally clear selected files or localStorage here
-      //   setSelectedFiles([]);  // Clear selected files
-      //   localStorage.removeItem("sectionData");
-      //   localStorage.removeItem("brandSectionData");
-      //   localStorage.removeItem("clientSectionData");
-      //   window.location.reload();
-      // }
-      // else {
+        // Optionally clear selected files or localStorage here
+        setSelectedFiles([]);  // Clear selected files
+        localStorage.removeItem("sectionData");
+        localStorage.removeItem("brandSectionData");
+        localStorage.removeItem("clientSectionData");
+        window.location.reload();
+      }
+      else {
         // Call the API with the formData
         const result = await addGallary(formData);
         alert('Gallery insert successfully!');
@@ -320,7 +328,7 @@ const AddBrand: React.FC = () => {
         localStorage.removeItem("brandSectionData");
         localStorage.removeItem("clientSectionData");
         window.location.reload();
-      // }
+      }
 
     } catch (error) {
       console.error("Error uploading gallery:", error);
@@ -1002,8 +1010,8 @@ const AddBrand: React.FC = () => {
               borderRadius: '50px',
             }}
           >
-Save Gallery
-            {/* {id ? 'Update Gallery' : 'Save Gallery'}  */}
+
+            {id ? 'Update Gallery' : 'Save Gallery'} {/* Conditionally render text */}
           </Button>
         </Grid>
       </DashboadRootLayout>

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import RootLayout from '../../page';
+import DashboardLayout from '@/app/components/layout';
 import { Box, Button, TextField, MenuItem, Paper, Grid, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import userImage from '@/public/images/userDemo.jpg';
@@ -56,7 +56,7 @@ const Setting: React.FC = () => {
 
   return (
     <>
-      <RootLayout>
+      <DashboardLayout  >
         <Box sx={{fontFamily: 'Nunito Sans'}}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, }}>
           <Typography variant="h4">Achievement</Typography>
@@ -209,7 +209,7 @@ const Setting: React.FC = () => {
           </Paper>
         </ThemeProvider>
         </Box>
-      </RootLayout>
+      </DashboardLayout >
     </>
   );
 };

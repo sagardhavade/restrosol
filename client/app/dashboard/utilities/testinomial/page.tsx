@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import RootLayout from '../../page';
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Button, Paper, Typography, Grid, TextField, IconButton } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -242,7 +242,7 @@ const Testimonial: React.FC = () => {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4">Client Testimonial</Typography>
         <Button variant="contained" color="primary" onClick={handleClickOpen} sx={{ borderRadius: '20px', height: '46px', width: '202px', backgroundColor: '#CBBC87', border: '1px' }}>
@@ -630,7 +630,7 @@ const Testimonial: React.FC = () => {
           />
         )}
       </Grid>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

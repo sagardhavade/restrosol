@@ -1,6 +1,6 @@
 // pages/jobs/page.tsx
 import React from 'react';
-import RootLayout from '../../page'; // Adjust the import path as necessary
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Button, Typography, Container, Grid } from '@mui/material';
 import JobCard from './components/Jobcard'; // Adjust the import path as necessary
 import { jobData } from '../jobpost/component/jobData'; // Adjust the import path as necessary
@@ -14,7 +14,7 @@ const Page = () => {
   const openJobs = jobData.filter(job => dayjs(job.closingDate).isAfter(today));
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Container sx={{fontFamily: 'Nunito Sans'}}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4">Resumes Applied</Typography>
@@ -28,7 +28,7 @@ const Page = () => {
         </Grid>
        
       </Container>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

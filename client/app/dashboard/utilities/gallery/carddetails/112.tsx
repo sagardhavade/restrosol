@@ -2,7 +2,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, Button, List, ListItem, Divider, TextField } from '@mui/material';
-import RootLayout from '../../../page'; // Adjust the import path as needed
+import DashboadRootLayout from '@/app/components/layout';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png'; // Adjust the import path as needed
@@ -85,7 +85,7 @@ const DetailsPage: React.FC = () => {
     }, []); // Empty array ensures it runs only once when the component mounts
   
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{ p: 0, backgroundColor: '#F5F6FA' }}>
         <Box
           sx={{
@@ -380,7 +380,7 @@ const DetailsPage: React.FC = () => {
           )}
         </Card>
       </Box>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

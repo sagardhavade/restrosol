@@ -115,7 +115,7 @@
 
 'use client';
 import React, { useState, useEffect } from 'react';
-import RootLayout from '../../page';
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Button, Typography } from '@mui/material';
 import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined';
 import { Grid, Card, CardContent, CardMedia } from '@mui/material';
@@ -175,7 +175,7 @@ const GalleryPage: React.FC = () => {
   }, []);
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Nunito Sans' }}>
         <Typography variant="h1">Gallery</Typography>
         {/* <Link href="/dashboard/utilities/gallery/addBrand" underline="none"> */}
@@ -242,7 +242,9 @@ const GalleryPage: React.FC = () => {
                     <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} />
                   </Button>
                 </Link> */}
-                <Link href={{ pathname: '/dashboard/utilities/gallery/carddetails', query: { id: product.id } }} passHref>
+                {/* <Link href={{ pathname: '/dashboard/utilities/gallery/carddetails', query: { id: product.id } }} passHref> */}
+                
+                <Link href={`/dashboard/utilities/gallery/carddetails/${String(product.id)}`} passHref>
                   <Button size="small" component="a">
                     {product.button}
                     <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} />
@@ -255,7 +257,7 @@ const GalleryPage: React.FC = () => {
           </Grid>
         ))}
       </Grid>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import RootLayout from '../../page'; // Adjust the import path as necessary
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Button, Typography, Container, Grid } from '@mui/material';
 import JobCard from './component/jobcard'; // Adjust the import path as necessary
 import { jobData } from './component/jobData'; // Adjust the import path as necessary
@@ -75,7 +75,7 @@ const Page: React.FC = () => {
 
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Container sx={{ fontFamily: 'Nunito Sans' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4">Job Posts</Typography>
@@ -117,7 +117,7 @@ const Page: React.FC = () => {
           ))}
         </Grid>
       </Container>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

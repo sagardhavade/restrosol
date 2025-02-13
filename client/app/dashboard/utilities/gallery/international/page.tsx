@@ -1,13 +1,13 @@
-import RootLayout from '@/app/dashboard/page'
+import DashboadRootLayout from '@/app/components/layout';
 import { Typography } from '@mui/material'
 import React from 'react'
 
 const International = () => {
   return (
     <>
-    <RootLayout>
+    <DashboadRootLayout>
         <Typography variant='h1'>International</Typography>
-    </RootLayout>
+    </DashboadRootLayout>
     </>
   )
 }

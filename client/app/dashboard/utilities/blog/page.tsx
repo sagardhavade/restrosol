@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import RootLayout from '../../page';
+import DashboadRootLayout from '@/app/components/layout';
 import CategoryDialog from './CategoryDialog';
 import { Box, Button, Grid, Typography, Tab, Tabs } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -131,7 +131,7 @@ const Page = () => {
   },[]);
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Grid container style={{ fontFamily: 'Nunito Sans',backgroundColor:'#F5F6FA' }}>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 2 }}>
@@ -192,7 +192,7 @@ const Page = () => {
         ))}
       </Grid>
       <CategoryDialog open={isDialogOpen} onClose={handleDialogClose} />
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

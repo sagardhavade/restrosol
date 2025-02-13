@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import RootLayout from '../../page';
+import DashboardLayout from '@/app/components/layout';
 import { Box, Typography, Button, TextField, Grid } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -217,7 +217,7 @@ fetchData();
 
   return (
     <>
-      <RootLayout>
+      <DashboardLayout>
         <Box sx={{ fontFamily: 'Nunito Sans' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Typography variant="h4">Achievement</Typography>
@@ -635,7 +635,7 @@ fetchData();
             />
           )}
         </Grid>
-      </RootLayout>
+      </DashboardLayout>
     </>
   );
 };

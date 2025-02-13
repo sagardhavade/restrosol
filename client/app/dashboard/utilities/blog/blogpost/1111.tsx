@@ -4,15 +4,20 @@ import { Box, Typography, Card, CardContent, Grid, Button, TextField, Divider,Li
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import RootLayout from '@/app/dashboard/page';
+import DashboadRootLayout from '@/app/components/layout';
 import Comments from './Comments';
 import { useSearchParams } from 'next/navigation'
 import { getBlog } from '@/app/api/blog/pageApi';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
 const BlogPostDetails: React.FC = () => {
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
+  // const { id } = searchParams(); // Access the dynamic parameter
+  // const router = useRouter();
+  // const { id } = router.query; // Access the dynamic `id` from the URL
+  
   console.log('Product ID:', id);  // Log the ID to verify
   const [content, setContent] = useState({
     category: '',
@@ -87,7 +92,7 @@ const BlogPostDetails: React.FC = () => {
 
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Grid container maxWidth="lg" bgcolor={'#F5F6FA'} p={2}>
         <Box sx={{ my: 4 }}>
           <Grid container spacing={3}>
@@ -348,7 +353,7 @@ const BlogPostDetails: React.FC = () => {
         </Grid>
         <Comments />
       </Grid>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

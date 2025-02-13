@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import RootLayout from '../../page';
+import DashboadRootLayout from '@/app/components/layout';
 import { Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, Chip, Paper, Button } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -34,7 +34,7 @@ const Page: React.FC = () => {
   const displayedRows = formLists.slice(startIndex, endIndex);
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{fontFamily: 'Nunito Sans'}}>
         <Typography variant="h2">Plan Form</Typography>
         <FilterBox />
@@ -187,7 +187,7 @@ const Page: React.FC = () => {
           </Box>
         </Box>
       </Box>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

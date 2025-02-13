@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import RootLayout from '@/app/dashboard/page';
+import React, { useState, useRef, useEffect,Suspense } from 'react';
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Button, Grid, TextField, Typography, MenuItem, Select, Divider, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Replace from '@/public/images/Replace.png';
@@ -9,7 +9,8 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Image from 'next/image';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/pageApi';
-import { useSearchParams } from 'next/navigation'
+// import { useSearchParams } from 'next/navigation';
+
 import { AddBusinessOutlined } from '@mui/icons-material';
 import { addBlog, getBlog, updateBlog } from '@/app/api/blog/pageApi';
 
@@ -60,9 +61,9 @@ const AddBrand: React.FC = () => {
 
   const [sectionImageFile, setSectionImageFile] = useState<File[]>([]);
   const [sectionImage, setSectionImage] = useState<string[]>([]);
-  const searchParams = useSearchParams()
-  const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
-  console.log('Product ID:', id);  // Lo
+  // const searchParams = useSearchParams()
+  // const id = searchParams.get('id'); // Retrieve the 'id' query parameter from the URL
+  // console.log('Product ID:', id);  // Lo
   const [isEditing, setIsEditing] = useState(false);
 
   // Load Section Data from LocalStorage on Page Load
@@ -89,40 +90,42 @@ const AddBrand: React.FC = () => {
   //if (id) {
     
       // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
-      useEffect(() => {
-        const fetchBlog = async () => {
-          try {
-            const fetchData = await getBlog(); // Replace with your actual fetch function
-            console.log(fetchData);
+      // useEffect(() => {
+      //   if (id) {
+      //   const fetchBlog = async () => {
+      //     try {
+      //       const fetchData = await getBlog(); // Replace with your actual fetch function
+      //       console.log(fetchData);
     
-            if (id) {
-              const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
-              console.log("didsf", matchedItem);
-              if (matchedItem) {
-                setCategory(matchedItem.category || '')
-                setTitle(matchedItem.title || '');
-                setDescription(matchedItem.decription || '');
-                setSectionDescription(matchedItem.sectionDecription || '');
-                setSection1Title(matchedItem.section1Title || '');
-                setSection1Description(matchedItem.section1Decription || '');
-                setSection2Title(matchedItem.section2Title || '');
-                setSection2Description(matchedItem.section2Decription || '');
-                setSection3Title(matchedItem.section3Title || '');
-                setSection3Description(matchedItem.section3Decription || '');
-                setSection4Title(matchedItem.section4Title || '');
-                setSection4Description(matchedItem.section4Decription || '');
-                setPoints(matchedItem.points || []);
-                setSectionImage(matchedItem.sectionImage);
-              }
-            }
-          } catch (err) {
-            console.log("err");
-            throw err;
-          }
-        }
-        fetchBlog(); // Call the fetch function once on mount
-      }, []); // Empty array ensures it runs only once when the component mounts
-    //}
+            
+      //         const matchedItem = fetchData.find((item: any) => item.id === id); // Find the item by id
+      //         console.log("didsf", matchedItem);
+      //         if (matchedItem) {
+      //           setCategory(matchedItem.category || '')
+      //           setTitle(matchedItem.title || '');
+      //           setDescription(matchedItem.decription || '');
+      //           setSectionDescription(matchedItem.sectionDecription || '');
+      //           setSection1Title(matchedItem.section1Title || '');
+      //           setSection1Description(matchedItem.section1Decription || '');
+      //           setSection2Title(matchedItem.section2Title || '');
+      //           setSection2Description(matchedItem.section2Decription || '');
+      //           setSection3Title(matchedItem.section3Title || '');
+      //           setSection3Description(matchedItem.section3Decription || '');
+      //           setSection4Title(matchedItem.section4Title || '');
+      //           setSection4Description(matchedItem.section4Decription || '');
+      //           setPoints(matchedItem.points || []);
+      //           setSectionImage(matchedItem.sectionImage);
+      //         }
+            
+      //     } catch (err) {
+      //       console.log("err");
+      //       throw err;
+      //     }
+      //   }
+      //   fetchBlog(); // Call the fetch function once on mount
+      // }
+        
+      // }, [id]); 
 
     useEffect(() => {
       if (brandSectionData?.description) {
@@ -278,18 +281,18 @@ const AddBrand: React.FC = () => {
       });
 
       try {
-        if (id) {
-          const result = await updateBlog(id, formData);
-          alert('Blog Updated successfully!');
+        // if (id) {
+        //   const result = await updateBlog(id, formData);
+        //   alert('Blog Updated successfully!');
 
-          // Optionally clear selected files or localStorage here
-          // setSelectedFiles([]);  // Clear selected files
-          localStorage.removeItem("sectionData");
-          localStorage.removeItem("brandSectionData");
-          localStorage.removeItem("clientSectionData");
-          window.location.reload();
-        }
-        else {
+        //   // Optionally clear selected files or localStorage here
+        //   // setSelectedFiles([]);  // Clear selected files
+        //   localStorage.removeItem("sectionData");
+        //   localStorage.removeItem("brandSectionData");
+        //   localStorage.removeItem("clientSectionData");
+        //   window.location.reload();
+        // }
+        // else {
           // Call the API with the formData
           const result = await addBlog(formData);
           alert('Blog insert successfully!');
@@ -300,7 +303,7 @@ const AddBrand: React.FC = () => {
           localStorage.removeItem("brandSectionData");
           localStorage.removeItem("section1Data");
           window.location.reload();
-        }
+        // }
 
       } catch (error) {
         console.error("Error uploading Blog:", error);
@@ -341,7 +344,7 @@ const AddBrand: React.FC = () => {
     };
     return (
       <>
-        <RootLayout>
+        <DashboadRootLayout>
           <Grid container justifyContent="center">
             <Box>
               <Box
@@ -835,11 +838,11 @@ const AddBrand: React.FC = () => {
                 borderRadius: '50px',
               }}
             >
-
-              {id ? 'Update Blog' : 'Save Blog'} {/* Conditionally render text */}
+Save Blog
+              {/* {id ? 'Update Blog' : 'Save Blog'}  */}
             </Button>
           </Grid>
-        </RootLayout>
+        </DashboadRootLayout>
       </>
     );
   };

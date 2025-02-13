@@ -1,4 +1,4 @@
-import RootLayout from '@/app/dashboard/page';
+import DashboadRootLayout from '@/app/components/layout';
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
@@ -13,7 +13,7 @@ const getStatusColor: Record<string, { backgroundColor: string; color: string }>
 
 const ResumesApplied = () => {
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4">Resumes Applied</Typography>
       </Box>
@@ -87,7 +87,7 @@ const ResumesApplied = () => {
           </Table>
         </TableContainer>
       </Grid>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

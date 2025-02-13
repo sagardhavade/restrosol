@@ -1,5 +1,5 @@
 'use client';
-import RootLayout from '@/app/dashboard/page';
+import RootLayout from '@/app/dashboard/layout';
 import { Box, Typography, Card, CardContent, Grid, Button, Divider } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Replace from '@/public/images/Replace.png';

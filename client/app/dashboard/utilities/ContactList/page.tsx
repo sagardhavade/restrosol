@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import RootLayout from '../../page';
+import DashboadRootLayout from '@/app/components/layout';
 import { Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -58,7 +58,7 @@ const Page: React.FC = () => {
   const displayedRows = contacts.slice(startIndex, endIndex);
 
   return (
-    <RootLayout>
+    <DashboadRootLayout>
       <Box sx={{ fontFamily: 'Nunito Sans',bgcolor:'#F5F6FA',p:2 }}>
         <Typography variant="h2">Contact Lists</Typography>
         <FilterBox />
@@ -226,7 +226,7 @@ const Page: React.FC = () => {
           </Box>
         </Paper>
       </Box>
-    </RootLayout>
+    </DashboadRootLayout>
   );
 };
 

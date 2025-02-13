@@ -117,7 +117,10 @@ export const UiLayout = ({ children }: Props) => {
               <Header />
             </div>
           )}
-          <div>{children}</div>
+          {/* {!hideHeaderFooter && ( */}
+            <div>{children}</div>
+          {/* )} */}
+          
           {!hideHeaderFooter && (
             <div className="section1400" style={{ background: '#141516' }}>
               <Footer />

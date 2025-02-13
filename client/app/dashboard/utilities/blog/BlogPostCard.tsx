@@ -5,7 +5,7 @@ import { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
 interface BlogPostCardProps {
-  id:string;
+  id: string;
   sectionImage: string;
   title: string;
   description: string;
@@ -16,7 +16,7 @@ interface BlogPostCardProps {
 }
 
 // const BlogPostCard: React.FC<BlogPostCardProps> = ({ img, title, subtitle, categoryBtn, date, viewMoreBtn,path }) => {
-  const BlogPostCard: React.FC<BlogPostCardProps> = ({ sectionImage, title, description, category, date,id }) => {
+const BlogPostCard: React.FC<BlogPostCardProps> = ({ sectionImage, title, description, category, date, id }) => {
   return (
     <Card sx={{ backgroundColor: '#fff', color: '#000', m: '20px' }}>
       <Box sx={{ position: 'relative', height: 200 }}>
@@ -38,10 +38,16 @@ interface BlogPostCardProps {
       </Box>
       <Divider sx={{ borderColor: '#000' }} />
       <CardActions>
-      {/* <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref> */}
-      <Link href={{ pathname: '/dashboard/utilities/blog/blogpost/', query: { id:id } }} passHref>
+        {/* <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref> */}
+        {/* <Link href={{ pathname: '/dashboard/utilities/blog/blogpost', query: { id:id } }} passHref> */}
+        {/* <Link href={{ pathname: '/dashboard/utilities/blog/blogpost', query: { id: id } }} passHref>
+
           <Button style={{textDecoration: 'none'}} size="small">View More</Button>
+        </Link> */}
+       <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref>
+          <Button style={{ textDecoration: 'none' }} size="small">View More</Button>
         </Link>
+
       </CardActions>
     </Card>
   );
