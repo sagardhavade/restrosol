@@ -60,9 +60,10 @@ const dbConfig = require('./config/database.config.js')
 mongoose.Promise = global.Promise
 
 // Connecting to the database
+// console.log("env",dbConfig.mongoURI);
 mongoose
-  // .connect(dbConfig.mongoURI, {
-    .connect(dbConfig.url, {
+   .connect(dbConfig.mongoURI, {
+    //.connect(dbConfig.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -77,7 +78,7 @@ mongoose
   })
 
 // Listen for requests
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 5008
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)
 })
