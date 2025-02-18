@@ -37,6 +37,7 @@ interface section1 {
 
 
 const AddBrand: React.FC = () => {
+  const [error, setError] = useState<string | null>(null); // Updated error state to ha
   const [sectionData, setSectionData] = useState<section | null>(null); // Can be null or a single object
   const [brandSectionData, setBrandSectionData] = useState<brandSection | null>(null); // Can be null or a single object
   const [section1Data, setSection1Data] = useState<section1 | null>(null); // Can be null or a single object
@@ -191,6 +192,11 @@ const AddBrand: React.FC = () => {
 
   // Save Section to LocalStorage
   const handleSaveSection = () => {
+   // Check if sectionImage is not an array or if it's an empty array
+   if (!sectionImage || (Array.isArray(sectionImage) && sectionImage.length === 0)) {
+    alert("Image is required");
+    return; // Prevent submission if no image
+  }
     const section: section = {
       sectionDecription,
       points,
@@ -199,6 +205,7 @@ const AddBrand: React.FC = () => {
     };
     // Ensure prevState is always an array
     setSectionData(section);
+    console.log(section);
     localStorage.setItem("sectionData", JSON.stringify(section));
     alert("Section data saved temporarily!");
   };
@@ -229,57 +236,95 @@ const AddBrand: React.FC = () => {
     };
     // Ensure prevState is always an array
     setBrandSectionData(section);
-
+console.log(section);
     localStorage.setItem("brandSectionData", JSON.stringify(section));
     alert("Brand Section data saved!");
   };
 
   const handleSaveBlog = async () => {
-    // Retrieve stored data from localStorage
-    const sectionData = localStorage.getItem("sectionData");
-    const brandSectionData = localStorage.getItem("brandSectionData");
-    const section1Data = localStorage.getItem("section1Data");
+     // Retrieve stored data from localStorage
+  const sectionData = localStorage.getItem("sectionData");
+  const brandSectionData = localStorage.getItem("brandSectionData");
+  const section1Data = localStorage.getItem("section1Data");
 
-    // Parse JSON data
-    const section = sectionData ? JSON.parse(sectionData) : null;
-    const brandSection = brandSectionData ? JSON.parse(brandSectionData) : null;
-    const section1 = section1Data ? JSON.parse(section1Data) : null;
+  // Log retrieved data for debugging
+  console.log("sectionData:", sectionData);
+  console.log("brandSectionData:", brandSectionData);
+  console.log("section1Data:", section1Data);
 
-    // Combine all data into one object
-    const combinedData = {
-      ...section,
-      ...brandSection,
-      ...section1,
-    };
+  // Check if any section data is missing
+  if (sectionData == null || brandSectionData == null || section1Data == null) {
+    alert("Please Save All Sections");
+    return; // Prevent further processing if any section is missing
+  }
 
-    const formData = new FormData();
-    console.log(combinedData);
-    // Append form data (combinedData) as a string
-    // formData.append("data", JSON.stringify(combinedData));
+  // Parse JSON data from localStorage
+  const section = sectionData ? JSON.parse(sectionData) : null;
+  const brandSection = brandSectionData ? JSON.parse(brandSectionData) : null;
+  const section1 = section1Data ? JSON.parse(section1Data) : null;
+
+  // Check if the parsed data is valid
+  if (!section || !brandSection || !section1) {
+    alert("Some section data is invalid or missing.");
+    return; // Prevent submission if parsed data is not valid
+  }
+
+  // Combine all data into one object (optional: this can be used later if needed)
+  const combinedData = {
+    ...section,
+    ...brandSection,
+    ...section1,
+  };
+  console.log("combinedData:", combinedData);
+
+  // Image validation (if applicable)
+  if (!sectionImage || (Array.isArray(sectionImage) && sectionImage.length === 0)) {
+    alert("Image is required");
+    return; // Prevent submission if no image
+  }
+
+  // Create formData and append the parsed data
+  const formData = new FormData();
+
+  // Append form data only if the fields are valid
+  if (brandSection.category) {
     formData.append("category", brandSection.category);
-    formData.append("title", brandSection.title);
-    formData.append("description", brandSection.description);
-    formData.append("sectionDecription", section.sectionDecription);
-    formData.append("points", section.points);
-    formData.append("section1Title", section1.section1Title);
-    formData.append("section1Decription", section1.section1Decription);
-    formData.append("section2Title", section1.section2Title);
-    formData.append("section2Decription", section1.section2Decription);
-    formData.append("section3Title", section1.section3Title);
-    formData.append("section3Decription", section1.section3Decription);
-    formData.append("section4Title", section1.section4Title);
-    formData.append("section4Decription", section1.section4Decription);
+  } else {
+    alert("Category is missing in the brand section");
+    return; // Prevent submission if category is missing
+  }
 
-    console.log("sectionImage", sectionImageFile.length)
-    // Append files to form data
-    if (sectionImageFile.length > 0) {
-      sectionImageFile.forEach(file => {
-        formData.append("sectionImage", file); // Append each image/video to "images" field
-      });
-    } else {
-      // If no images, you can choose to append null or empty array
-      formData.append("sectionImage", JSON.stringify([])); // Append an empty array if no images
-    }
+  // Append other fields conditionally (using optional chaining or checking for existence)
+  if (brandSection.title) formData.append("title", brandSection.title);
+  if (brandSection.description) formData.append("description", brandSection.description);
+  if (section.sectionDecription) formData.append("sectionDecription", section.sectionDecription);
+  if (Array.isArray(section.points)) formData.append("points", JSON.stringify(section.points)); // Assuming points is an array
+  if (section1.section1Title) formData.append("section1Title", section1.section1Title);
+  if (section1.section1Decription) formData.append("section1Decription", section1.section1Decription);
+  if (section1.section2Title) formData.append("section2Title", section1.section2Title);
+  if (section1.section2Decription) formData.append("section2Decription", section1.section2Decription);
+  if (section1.section3Title) formData.append("section3Title", section1.section3Title);
+  if (section1.section3Decription) formData.append("section3Decription", section1.section3Decription);
+  if (section1.section4Title) formData.append("section4Title", section1.section4Title);
+  if (section1.section4Decription) formData.append("section4Decription", section1.section4Decription);
+
+  // If sectionImageFile is an array, append it to the formData (if available)
+  if (sectionImage && Array.isArray(sectionImage) && sectionImage.length > 0) {
+    formData.append("sectionImage", sectionImage[0]); // Assuming sectionImage is an array, append the first image
+  }
+
+  // Log the FormData for debugging (be cautious with FormData logging)
+  console.log("FormData:", formData);
+  //   console.log("sectionImage", sectionImageFile.length)
+  //   // Append files to form data
+  //   if (sectionImageFile.length > 0) {
+  //     sectionImageFile.forEach(file => {
+  //       formData.append("sectionImage", file); // Append each image/video to "images" field
+  //     });
+  //   } else {
+  //     // If no images, you can choose to append null or empty array
+  //     formData.append("sectionImage", JSON.stringify([])); // Append an empty array if no images
+  //   }
 
     // Log FormData contents for debugging
     formData.forEach((value, key) => {
@@ -346,6 +391,7 @@ const AddBrand: React.FC = () => {
       const imageUrl = URL.createObjectURL(file); // Generate a valid URL
       setSectionImageFile([file]); // Store the file in an array
       setSectionImage([imageUrl]); // Store the preview in an array
+      setError(null); // Clear any previous errors when a new image is selected
     }
   };
   return (
@@ -577,6 +623,7 @@ const AddBrand: React.FC = () => {
                       width={466}
                       height={366}
                       style={{ borderRadius: "8px", objectFit: "cover" }}
+                      
                     />
                   ) : (
                     <p>No image selected</p>
@@ -847,6 +894,7 @@ const AddBrand: React.FC = () => {
 
             {id ? 'Update Blog' : 'Save Blog'} {/* Conditionally render text */}
           </Button>
+         
         </Grid>
       </DashboadRootLayout>
     </>

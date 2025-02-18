@@ -33,3 +33,14 @@ export const getBlog = async () => {
         throw err;
     }
 }
+
+export const deleteBlog = async (id: string,) =>{
+    try{
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_API}/blog/${id}`);
+        console.log(response);
+    }catch(err)
+    {
+        console.log(err);
+        throw err;
+    }
+}

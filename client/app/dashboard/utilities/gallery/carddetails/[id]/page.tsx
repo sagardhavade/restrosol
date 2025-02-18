@@ -7,7 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Image from 'next/image';
 import Replace from '@/public/images/Replace.png'; // Adjust the import path as needed
 import { Trykker } from 'next/font/google';
-import { getGallary } from '@/app/api/gallary/pageApi';
+import { deleteGallary, getGallary } from '@/app/api/gallary/pageApi';
 import { ArrowBack } from '@mui/icons-material';
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link';
@@ -52,6 +52,17 @@ const id = params.id;
     window.history.back(); // This will go back to the previous page
   };
 
+  const deleteGalary = async() =>{
+    try{
+      const res = await deleteGallary(id);
+      alert("Gallary Deleted");
+      handleGoBack();
+    }catch(errr)
+    {
+      console.log("delete Gallary error",errr);
+      throw errr;
+    }
+  }
     // Function to fetch gallery data
  
     // useEffect with an empty dependency array to ensure the fetchGallary function runs only once
@@ -105,14 +116,16 @@ const id = params.id;
           <Button
             variant="outlined"
             sx={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: 'blue'
+              borderRadius: '20px',
+              height: '46px',
+              width: '202px',
+              backgroundColor:'rgb(248, 121, 89)',
+              border: '1px',
             }}
-            onClick={handleGoBack}
+            onClick={deleteGalary}
           >
-            <ArrowBack />
-            {` Go Back`}</Button>
+            {/* <ArrowBack /> */}
+            {` Delete Gallery`}</Button>
           {/* <Button
             variant="contained"
             onClick={handleEditClick} 
@@ -123,7 +136,15 @@ const id = params.id;
            {/* <Link href={{ pathname: '/dashboard/utilities/gallery/addBrand', query: { id:id?.toString()} }} passHref> */}
            <Link href={`/dashboard/utilities/gallery/addBrand/${id}`} passHref>
            {/* <Link href={`/dashboard/utilities/gallery/addBrand/${String(id)}`} passHref> */}
-                  <Button size="small" component="a">
+                  <Button size="small" component="a"
+                   sx={{
+                    borderRadius: '20px',
+                    height: '46px',
+                    width: '202px',
+                    backgroundColor: '#CBBC87',
+                    border: '1px',
+                  }}
+                  >
                     Edit Gallery
                     {/* <ArrowRightAltOutlinedIcon sx={{ color: '#000' }} /> */}
                   </Button>

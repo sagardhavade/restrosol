@@ -22,7 +22,8 @@ interface Contact {
   date: string;
 }
 
-const API_URL = 'http://localhost:4000/api/v1/contactList';
+// const API_URL = 'http://localhost:4000/api/v1/contactList';
+const API_URL = `${process.env.NEXT_PUBLIC_API}/contactList`;
 
 function* fetchContactsSaga(action: any) {
   try {
@@ -34,15 +35,26 @@ function* fetchContactsSaga(action: any) {
 }
 
 
+// function* addContactSaga(action: any) {
+//   console.log("saga");
+//   const {payload} = action.payload;
+//   try {
+//     const response: AxiosResponse<Contact> = yield call(axios.post, API_URL, payload);
+    
+//     yield put(addContactSuccess(response.data));
+//   } catch (error) {
+//     // Dispatch the addContactFailure action with the error message
+//     yield put(addContactFailure((error as Error).message));
+//   }
+// }
+// src/sagas/contactSaga.ts
+
 function* addContactSaga(action: any) {
-  console.log("saga");
-  const {payload} = action.payload;
+  const { payload } = action; // Directly extracting payload here
   try {
     const response: AxiosResponse<Contact> = yield call(axios.post, API_URL, payload);
-    
     yield put(addContactSuccess(response.data));
   } catch (error) {
-    // Dispatch the addContactFailure action with the error message
     yield put(addContactFailure((error as Error).message));
   }
 }
@@ -72,7 +84,7 @@ export function* contactSaga() {
     yield takeLatest("contacts/fetchContacts", fetchContactsSaga);
     yield takeLatest("contacts/addContact", addContactSaga);
     yield takeLatest("contacts/updateContactSaga", updateContactSaga);
-    yield takeLatest("contacts/updateContactSaga", updateContactSaga);
+    // yield takeLatest("contacts/updateContactSaga", updateContactSaga);
     yield takeLatest("contacts/deleteContactSaga", deleteContactSaga);
   }
   

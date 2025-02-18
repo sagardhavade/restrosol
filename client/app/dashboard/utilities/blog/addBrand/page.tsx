@@ -37,6 +37,7 @@ interface section1 {
 
 
 const AddBrand: React.FC = () => {
+  const [error, setError] = useState<string | null>(null); // Updated error state to ha
   const [sectionData, setSectionData] = useState<section | null>(null); // Can be null or a single object
   const [brandSectionData, setBrandSectionData] = useState<brandSection | null>(null); // Can be null or a single object
   const [section1Data, setSection1Data] = useState<section1 | null>(null); // Can be null or a single object
@@ -183,14 +184,19 @@ const AddBrand: React.FC = () => {
     }, [section1Data]);
 
 
-    // Save Section to LocalStorage
     const handleSaveSection = () => {
+      // Check if sectionImage is not an array or if it's an empty array
+      if (!sectionImage || (Array.isArray(sectionImage) && sectionImage.length === 0)) {
+        alert("Image is required");
+        return; // Prevent submission if no image
+      }
       const section: section = {
         sectionDecription,
         points,
         sectionImage
 
       };
+      console.log("sectionData",section);
       // Ensure prevState is always an array
       setSectionData(section);
       localStorage.setItem("sectionData", JSON.stringify(section));
@@ -311,7 +317,12 @@ const AddBrand: React.FC = () => {
       }
     };
 
-
+    const handleClearBlog = async () =>{
+      localStorage.removeItem("sectionData");
+      localStorage.removeItem("brandSectionData");
+      localStorage.removeItem("section1Data");
+      window.location.reload();
+    }
     const handleChange = (event: SelectChangeEvent<string>) => {
       setCategory(event.target.value as string);
 
@@ -336,16 +347,18 @@ const AddBrand: React.FC = () => {
 
     const handleSectionImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+      
       if (file) {
         const imageUrl = URL.createObjectURL(file); // Generate a valid URL
         setSectionImageFile([file]); // Store the file in an array
         setSectionImage([imageUrl]); // Store the preview in an array
+        setError(null); // Clear any previous errors when a new image is selected
       }
     };
     return (
       <>
         <DashboadRootLayout>
-          <Grid container justifyContent="center">
+          <Grid container justifyContent="center" mb={10}>
             <Box>
               <Box
                 mt={5}
@@ -577,7 +590,7 @@ const AddBrand: React.FC = () => {
                     )}
 
                     {/* File Input */}
-                    <input type="file" accept="image/*" onChange={handleSectionImageChange} />
+                    <input type="file" accept="image/*" required onChange={handleSectionImageChange} />
 
                     {/* Show File Details */}
                     {sectionImageFile.length > 0 && <p>Selected File: {sectionImageFile[0].name}</p>}
@@ -828,6 +841,22 @@ const AddBrand: React.FC = () => {
               </Box>
             </Box>
             <Button
+            variant="contained"
+            onClick={handleClearBlog}
+            style={{
+              width: '202px',
+              height: '46px',
+              top: '130px',
+              right: '20px',
+              backgroundColor:'lightblue',
+
+              borderRadius: '50px',
+            }}
+          >
+
+            Clear Blog
+          </Button>
+            <Button
               variant="contained"
               onClick={handleSaveBlog}
               style={{
@@ -841,6 +870,7 @@ const AddBrand: React.FC = () => {
 Save Blog
               {/* {id ? 'Update Blog' : 'Save Blog'}  */}
             </Button>
+           
           </Grid>
         </DashboadRootLayout>
       </>

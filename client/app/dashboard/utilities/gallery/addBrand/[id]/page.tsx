@@ -11,6 +11,7 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { addGallary, getGallary, updateGallary } from '@/app/api/gallary/pageApi';
 import { useSearchParams } from 'next/navigation'
 import { useParams } from 'next/navigation';
+import { setConfig } from 'next/config';
 interface Client {
   name: string;
   image: string;
@@ -191,6 +192,7 @@ const AddBrand: React.FC = () => {
       sectionImage
 
     };
+console.log(section);
     // Ensure prevState is always an array
     setSectionData(section);
 
@@ -225,77 +227,49 @@ const AddBrand: React.FC = () => {
     alert("Client Section Data Saved !");
   }
   const handleAddGallary = async () => {
-    // Retrieve stored data from localStorage
-    const sectionData = localStorage.getItem("sectionData");
-    const brandSectionData = localStorage.getItem("brandSectionData");
-    const clientSectionData = localStorage.getItem("clientSectionData");
+     // Retrieve stored data from localStorage
+  const sectionData = localStorage.getItem("sectionData");
+  const brandSectionData = localStorage.getItem("brandSectionData");
+  const clientSectionData = localStorage.getItem("clientSectionData");
 
-    // Parse JSON data
-    const section = sectionData ? JSON.parse(sectionData) : null;
-    const brandSection = brandSectionData ? JSON.parse(brandSectionData) : null;
-    const clientSection = clientSectionData ? JSON.parse(clientSectionData) : null;
+  // Parse JSON data with fallback to null if parsing fails
+  const section = sectionData ? JSON.parse(sectionData) : null;
+  const brandSection = brandSectionData ? JSON.parse(brandSectionData) : null;
+  const clientSection = clientSectionData ? JSON.parse(clientSectionData) : null;
+console.log(sectionData);
+  // Check if any of the sections are missing
+  if (!section || !brandSection || !clientSection) {
+    alert("One or more sections are missing. Please Save All Section");
+    return; // Prevent submission if data is incomplete
+  }
 
-    // Combine all data into one object
-    const combinedData = {
-      ...section,
-      ...brandSection,
-      ...clientSection,
-    };
+  // Create FormData instance
+  const formData = new FormData();
 
-    const formData = new FormData();
-    console.log(combinedData);
-    // Append form data (combinedData) as a string
-    // formData.append("data", JSON.stringify(combinedData));
-    formData.append("category", brandSection.category);
-    formData.append("brandName", brandSection.brandName);
-    formData.append("brandDescription", brandSection.brandDescription);
-    formData.append("description", section.description);
-    formData.append("points", section.points);
-    formData.append("clientName", clientSection.clientName);
-    // formData.append("clientImage", clientSection.clientImage);
-    formData.append("clientDescription", clientSection.clientDescription);
-    // formData.append("clientSectionImage", clientSection.clientSectionImageFile); // Append each image/video to "images" field
-    // formData.append("sectionImage", section.sectionImageFile); // Append each image/video to "images" field
+  // Append fields to formData
+  formData.append("category", brandSection.category || ""); // Default empty string if null
+  formData.append("brandName", brandSection.brandName || "");
+  formData.append("brandDescription", brandSection.brandDescription || "");
+  formData.append("description", section.description || "");
+//  formData.append("points", section.points ? JSON.stringify(section.points) : "[]");
+formData.append("points", section.points || "");
+  formData.append("clientName", clientSection.clientName || "");
+  formData.append("clientDescription", clientSection.clientDescription || "");
 
-    // Append files to form data
-    if (selectedFiles.length > 0) {
-      selectedFiles.forEach(file => {
-        formData.append("images", file); // Append each image/video to "images" field
-      });
+  // Append files to formData (ensure to check if arrays are empty)
+  appendFilesToFormData(formData, selectedFiles, "images");
+  appendFilesToFormData(formData, clientFileList, "clientImage");
+  appendFilesToFormData(formData, clientSectionImageFile, "clientSectionImage");
+  appendFilesToFormData(formData, sectionImageFile, "sectionImage");
+
+  // Function to append files or empty array to formData
+  function appendFilesToFormData(formData: FormData, files: File[], fieldName: string) {
+    if (files.length > 0) {
+      files.forEach(file => formData.append(fieldName, file)); // Append each file
     } else {
-      // If no images, you can choose to append null or empty array
-      formData.append("images", JSON.stringify([])); // Append an empty array if no images
+      formData.append(fieldName, JSON.stringify([])); // Append empty array if no files
     }
-
-    // Append files to form data
-    if (clientFileList.length > 0) {
-      clientFileList.forEach(file => {
-        formData.append("clientImage", file); // Append each image/video to "images" field
-      });
-    } else {
-      // If no images, you can choose to append null or empty array
-      formData.append("clientImage", JSON.stringify([])); // Append an empty array if no images
-    }
-
-
-    // Append files to form data
-    if (clientSectionImageFile.length > 0) {
-      clientSectionImageFile.forEach(file => {
-        formData.append("clientSectionImage", file); // Append each image/video to "images" field
-      });
-    } else {
-      // If no images, you can choose to append null or empty array
-      formData.append("clientSectionImage", JSON.stringify([])); // Append an empty array if no images
-    }
-    // Append files to form data
-    if (sectionImageFile.length > 0) {
-      sectionImageFile.forEach(file => {
-        formData.append("sectionImage", file); // Append each image/video to "images" field
-      });
-    } else {
-      // If no images, you can choose to append null or empty array
-      formData.append("sectionImage", JSON.stringify([])); // Append an empty array if no images
-    }
+  }
 
     // Log FormData contents for debugging
     formData.forEach((value, key) => {

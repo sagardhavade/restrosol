@@ -21,6 +21,12 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ sectionImage, title, descri
     <Card sx={{ backgroundColor: '#fff', color: '#000', m: '20px' }}>
       <Box sx={{ position: 'relative', height: 200 }}>
         <Image src={Array.isArray(sectionImage) ? sectionImage[0] : sectionImage} alt={title} layout="fill" objectFit="cover" />
+        {/* <Image
+          src={Array.isArray(sectionImage) && sectionImage[0] ? sectionImage[0] : '/default-image.jpg'} // Fallback to default if sectionImage is invalid
+          alt={title}
+          layout="fill"
+          objectFit="cover"
+        /> */}
       </Box>
       <CardContent>
         <Typography variant="h5" component="div" textAlign={'center'}>
@@ -44,7 +50,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ sectionImage, title, descri
 
           <Button style={{textDecoration: 'none'}} size="small">View More</Button>
         </Link> */}
-       <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref>
+        <Link href={`/dashboard/utilities/blog/blogpost/${id}`} passHref>
           <Button style={{ textDecoration: 'none' }} size="small">View More</Button>
         </Link>
 

@@ -20,7 +20,18 @@ const initialState: ContactState = {
   loading: false,
   error: null,
 };
+// Define specific action payload types
+interface AddContactPayload {
+  name: string;
+  email: string;
+  type: string;
+  status: string;
+}
 
+interface UpdateContactPayload {
+  id: string;
+  status: string;
+}
 const contactSlice = createSlice({
   name: 'contacts',
   initialState,
@@ -37,10 +48,14 @@ const contactSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    addContact: (state, action: PayloadAction<any>) => {
+    // addContact: (state, action: PayloadAction<any>) => {
+    //   state.loading = true;
+    //   state.error = null;
+    //   console.log('Slice');
+    // },
+    addContact: (state, action: PayloadAction<AddContactPayload>) => {
       state.loading = true;
       state.error = null;
-      console.log('Slice');
     },
 
     addContactSuccess: (state, action: PayloadAction<any>) => {

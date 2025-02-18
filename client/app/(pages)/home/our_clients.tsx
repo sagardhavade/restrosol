@@ -36,7 +36,7 @@ function Our_clients() {
     <>
       <div className="clients_section">
         <div className="clients_title ">
-          What our <span style={{ color: '#cbbc87;' }}>clients</span> say
+          What our <span style={{ color: '#cbbc87' }}>clients</span> say
         </div>
         <div className="clients_paragraph">
           Restrosol is very much professional in Restaurant Consultancy. Their organisational structure is full of

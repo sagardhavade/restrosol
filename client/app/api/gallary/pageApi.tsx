@@ -33,3 +33,15 @@ export const getGallary = async () => {
         throw err;
     }
 }
+// Update an existing gallery
+export const deleteGallary = async (id: string) => {
+    try {
+        
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_API}/gallary/${id}`);
+        console.log("deleted gallary response:", response);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting gallary:', error);
+        throw error;
+    }
+};

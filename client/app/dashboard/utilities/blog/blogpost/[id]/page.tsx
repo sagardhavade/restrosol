@@ -7,11 +7,16 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DashboadRootLayout from '@/app/components/layout';
 import Comments from '../Comments';
 import { useSearchParams } from 'next/navigation'
-import { getBlog } from '@/app/api/blog/pageApi';
+import { deleteBlog, getBlog } from '@/app/api/blog/pageApi';
 import Link from 'next/link';
 
 interface BlogPostProps {
   params: { id: string };
+}
+// Define the expected response type from deleteBlog
+interface DeleteBlogResponse {
+  success: boolean;
+  message: string;
 }
 
 // import { useRouter } from 'next/router';
@@ -55,6 +60,28 @@ const BlogPostDetails: React.FC <BlogPostProps>= ({ params }) => {
 
   const handleEditArticle = (): void => {
     setIsEditMode(!isEditMode); // Toggle edit mode
+  };
+  const handleDeleteArticle = async() => {
+    console.log(id);
+    try {
+      // Check if id is not null or undefined before making the API call
+      if (id == null) {
+        alert("Article ID is missing. Cannot delete the article.");
+        return; // Early return if id is invalid
+      }
+  
+      //const response:DeleteBlogResponse  = await deleteBlog(id);  // Assuming deleteBlog is your API function to delete the article
+      const response = await deleteBlog(id);
+
+     
+        alert("Article Deleted successfully");
+        window.history.back();
+     
+    } catch (err) {
+      // Handle error, log it and alert the user
+      console.error("Error deleting article:", err);
+      alert("An error occurred while deleting the article. Please try again later.");
+    }
   };
 
   // Function to fetch gallery data
@@ -104,6 +131,21 @@ const BlogPostDetails: React.FC <BlogPostProps>= ({ params }) => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Link href={`/dashboard/utilities/blog/addBrand/${id}`} passHref>
+                  <Button
+                    variant="contained"
+                    onClick={handleDeleteArticle}
+                    sx={{
+                      borderRadius: '20px',
+                      height: '46px',
+                      width: '202px',
+                      backgroundColor:'rgb(248, 121, 89)',
+                      border: '1px',
+                    }}
+                  >
+                 Delete Article
+                  </Button>
+                </Link>
                 <Typography variant="h4">Article</Typography>
                 {/* <Link href={{ pathname: '/dashboard/utilities/blog/addBrand', query: { id: id } }} passHref> */}
                 <Link href={`/dashboard/utilities/blog/addBrand/${id}`} passHref>
